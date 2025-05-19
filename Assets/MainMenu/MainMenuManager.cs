@@ -1,30 +1,29 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Other;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuManager : MonoBehaviour
+namespace MainMenu
 {
-    public Button startBtn, exitBtn;
-
-    // Start is called before the first frame update
-    void Start()
+    public class MainMenuManager : MonoBehaviour
     {
-        startBtn.onClick.AddListener(startGame);
-        exitBtn.onClick.AddListener(exitGame);
+        public Button startBtn, exitBtn;
+
+        private void Start()
+        {
+            startBtn.onClick.AddListener(StartGame);
+            exitBtn.onClick.AddListener(ExitGame);
+        }
+
+        private static void StartGame()
+        {
+            SceneLoader.LoadLevel(1);
+        }
+
+        private static void ExitGame()
+        {
+            Application.Quit();
+            EditorApplication.ExitPlaymode();
+        }
     }
-
-	private void startGame()
-	{
-		SceneLoader.loadLevel(1);
-	}
-
-	private void exitGame()
-	{
-		Application.Quit();
-		EditorApplication.ExitPlaymode();
-	}
-
 }

@@ -1,22 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
-enum Scene
+namespace Other
 {
-
-}
-
-public static class SceneLoader
-{
-    public static void loadLevel(int level)
+	internal enum Scene
 	{
-		SceneManager.LoadScene(level.ToString());
+
 	}
 
-	public static void loadMainMenu()
+	public static class SceneLoader
 	{
-		SceneManager.LoadScene("MainMenu");
+		public static void LoadLevel(int level)
+		{
+			SceneManager.LoadScene(level.ToString());
+		}
+
+		public static void LoadMainMenu()
+		{
+			SceneManager.LoadScene("MainMenu");
+		}
 	}
 }

@@ -1,53 +1,60 @@
 using System.Collections;
-using System.Collections.Generic;
+using Grappables.JumpPad;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class JumpPadPhysics : MonoBehaviour
+namespace Player
 {
-    private Vector2 savedVelocity;
-
-    Rigidbody2D rb;
-
-    public AnimationCurve jumppadSpeedChange;
-    public float maxApproachSpeed = 20;
-    public float velocitySaveDist = 1f;
-
-    public Vector2 position2D => new Vector2(transform.position.x, transform.position.y);
-
-
-    void Awake()
+    public class JumpPadPhysics : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        [FormerlySerializedAs("jumppadSpeedChange")]
+        public AnimationCurve jumpPadSpeedChange;
 
-    public void JumpOff(JumpPad pad)
-	{
-        StartCoroutine(JumpOffCoroutine(pad));
-	}
+        public float maxApproachSpeed = 20;
+        public float velocitySaveDist = 1f;
 
-    private IEnumerator JumpOffCoroutine(JumpPad pad)
-    {
-        float t = 0;
-        Vector2 initial = rb.linearVelocity;
-        savedVelocity = Vector2.zero;
+        private Rigidbody2D _rb;
+        private Vector2 _savedVelocity;
 
-        while (t < 1 && !pad.IsTargetReached(rb.position))
+        public Vector2 Position2D => new(transform.position.x, transform.position.y);
+
+
+        private void Awake()
         {
-            Vector2 dir = (pad.TargetPosition - position2D).normalized;
-            Vector2 vel = Vector2.Lerp(initial, dir * maxApproachSpeed, jumppadSpeedChange.Evaluate(t));
-
-            if(Vector2.Distance(pad.TargetPosition, position2D) < velocitySaveDist && savedVelocity == Vector2.zero)
-			{
-                Vector2 perp = Vector2.Perpendicular(pad.JumpDirection).normalized;
-                savedVelocity = Vector2.Dot(perp, vel) * perp;
-			}
-            rb.linearVelocity = vel;
-            t += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
+            _rb = GetComponent<Rigidbody2D>();
         }
 
-        Debug.Log(savedVelocity);
-        pad.Activate();
-        rb.linearVelocity = pad.maxSpeed * pad.JumpDirection + savedVelocity;
+        public void JumpOff(JumpPad pad)
+        {
+            StartCoroutine(JumpOffCoroutine(pad));
+        }
+
+        private IEnumerator JumpOffCoroutine(JumpPad pad)
+        {
+            float t = 0;
+            var initial = _rb.linearVelocity;
+            _savedVelocity = Vector2.zero;
+
+            while (t < 1 && !pad.IsTargetReached(_rb.position))
+            {
+                var dir = (pad.TargetPosition - Position2D).normalized;
+                var vel = Vector2.Lerp(initial, dir * maxApproachSpeed, jumpPadSpeedChange.Evaluate(t));
+
+                if (Vector2.Distance(pad.TargetPosition, Position2D) < velocitySaveDist &&
+                    _savedVelocity == Vector2.zero)
+                {
+                    var perp = Vector2.Perpendicular(pad.JumpDirection).normalized;
+                    _savedVelocity = Vector2.Dot(perp, vel) * perp;
+                }
+
+                _rb.linearVelocity = vel;
+                t += Time.fixedDeltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+
+            Debug.Log(_savedVelocity);
+            pad.Activate();
+            _rb.linearVelocity = pad.maxSpeed * pad.JumpDirection + _savedVelocity;
+        }
     }
 }

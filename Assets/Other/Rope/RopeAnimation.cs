@@ -1,98 +1,99 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RopeAnimation : MonoBehaviour
+namespace Other.Rope
 {
-	private LineRenderer line;
-	private Coroutine animation;
-
-	public AnimationCurve startShape;
-	public AnimationCurve endShape;
-	public AnimationCurve strengthOverTime;
-	public int resolution;
-	public float strengthScale = 5f;
-	public float animationTime = 0.3f;
-	public float flightTime = 0.2f;
-
-	private void Awake()
+	public class RopeAnimation : MonoBehaviour
 	{
-		line = GetComponent<LineRenderer>();
-	}
+		private LineRenderer _line;
+		private Coroutine _animation;
 
-	public void Attatch(Transform start, Transform end)
-	{
-		//line.positionCount = 2;
-		//line.SetPosition(0, start.position);
-		//line.SetPosition(1, end.position);
-		//line.enabled = true;
-		if (animation != null)
-			StopCoroutine(animation);
-		animation = StartCoroutine(ropeAnimation(start,end));
-	}
+		public AnimationCurve startShape;
+		public AnimationCurve endShape;
+		public AnimationCurve strengthOverTime;
+		public int resolution;
+		public float strengthScale = 5f;
+		public float animationTime = 0.3f;
+		public float flightTime = 0.2f;
 
-	public void Deattach()
-	{
-		line.enabled = false;
-		if (animation != null)
-			StopCoroutine(animation);
-	}
-
-	IEnumerator ropeAnimation(Transform start, Transform end)
-	{
-		float t = 0;
-
-		line.positionCount = 2;
-		line.enabled = true;
-
-		while(t < 1)
+		private void Awake()
 		{
-			Vector2 start2D = new Vector2(start.position.x, start.position.y);
-			Vector2 end2D = new Vector2(end.position.x, end.position.y);
-
-			Vector2 ropeEnd = Vector2.Lerp(start2D, end2D, t);
-			line.SetPosition(0, start2D);
-			line.SetPosition(1, ropeEnd);
-
-			t += Time.deltaTime / flightTime;
-			yield return null;
+			_line = GetComponent<LineRenderer>();
 		}
 
-		t = 0;
-		line.positionCount = resolution;
-		while (t < 1)
+		public void Attach(Transform start, Transform end)
 		{
-			Vector2 start2D = new Vector2(start.position.x, start.position.y);
-			Vector2 end2D = new Vector2(end.position.x, end.position.y);
-			Vector2 perp = Vector2.Perpendicular(end2D - start2D).normalized;
+			//line.positionCount = 2;
+			//line.SetPosition(0, start.position);
+			//line.SetPosition(1, end.position);
+			//line.enabled = true;
+			if (_animation != null)
+				StopCoroutine(_animation);
+			_animation = StartCoroutine(Animate(start,end));
+		}
 
-			for (int i = 0; i < resolution; i++)
+		public void Deattach()
+		{
+			_line.enabled = false;
+			if (_animation != null)
+				StopCoroutine(_animation);
+		}
+
+		private IEnumerator Animate(Transform start, Transform end)
+		{
+			float t = 0;
+
+			_line.positionCount = 2;
+			_line.enabled = true;
+
+			while(t < 1)
 			{
-				float x = 1f * i / resolution;
-				float startY = startShape.Evaluate(x) * strengthOverTime.Evaluate(t) * strengthScale;
-				float endY = endShape.Evaluate(x) * strengthOverTime.Evaluate(t) * strengthScale;
-				float y = Mathf.Lerp(startY, endY, t);
+				var start2D = new Vector2(start.position.x, start.position.y);
+				var end2D = new Vector2(end.position.x, end.position.y);
 
-				Vector2 pos = Vector2.Lerp(start2D, end2D, x);
-				pos += perp * y;
+				var ropeEnd = Vector2.Lerp(start2D, end2D, t);
+				_line.SetPosition(0, start2D);
+				_line.SetPosition(1, ropeEnd);
 
-				line.SetPosition(i, pos);
-
+				t += Time.deltaTime / flightTime;
+				yield return null;
 			}
 
-			t += Time.deltaTime / animationTime;
-			yield return null;
-		}
+			t = 0;
+			_line.positionCount = resolution;
+			while (t < 1)
+			{
+				var start2D = new Vector2(start.position.x, start.position.y);
+				var end2D = new Vector2(end.position.x, end.position.y);
+				var perp = Vector2.Perpendicular(end2D - start2D).normalized;
 
-		line.positionCount = 2;
-		while (true)
-		{
-			Vector2 start2D = new Vector2(start.position.x, start.position.y);
-			Vector2 end2D = new Vector2(end.position.x, end.position.y);
+				for (var i = 0; i < resolution; i++)
+				{
+					var x = 1f * i / resolution;
+					var startY = startShape.Evaluate(x) * strengthOverTime.Evaluate(t) * strengthScale;
+					var endY = endShape.Evaluate(x) * strengthOverTime.Evaluate(t) * strengthScale;
+					var y = Mathf.Lerp(startY, endY, t);
 
-			line.SetPosition(0, start2D);
-			line.SetPosition(1, end2D);
-			yield return null;
+					var pos = Vector2.Lerp(start2D, end2D, x);
+					pos += perp * y;
+
+					_line.SetPosition(i, pos);
+				}
+
+				t += Time.deltaTime / animationTime;
+				yield return null;
+			}
+
+			_line.positionCount = 2;
+			while (true)
+			{
+				var start2D = new Vector2(start.position.x, start.position.y);
+				var end2D = new Vector2(end.position.x, end.position.y);
+
+				_line.SetPosition(0, start2D);
+				_line.SetPosition(1, end2D);
+				yield return null;
+			}
 		}
 	}
 }

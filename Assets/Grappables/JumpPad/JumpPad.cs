@@ -1,65 +1,72 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class JumpPad : Grappable
+namespace Grappables.JumpPad
 {
-	private Rigidbody2D rb;
-	public Transform target;
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class JumpPad : Grappable
+    {
+        public Transform target;
 
-	public Vector2 TargetPosition => new Vector2(target.position.x, target.position.y);
-	public Vector2 JumpDirection => new Vector2(transform.up.x, transform.up.y);
+        [FormerlySerializedAs("distTriggerTreshold")]
+        public float distTriggerThreshold = 0.04f;
 
-	public float distTriggerTreshold = 0.04f;
-	public float maxSpeed = 30;
-	public AnimationCurve speedCurve;
-	public float maxDist = 0;
-	public float retreatSpeed = 2f;
+        public float maxSpeed = 30;
+        public AnimationCurve speedCurve;
+        public float maxDist;
+        public float retreatSpeed = 2f;
+        private Rigidbody2D _rb;
 
-	protected override void Awake()
-	{
-		base.Awake();
-		rb = GetComponent<Rigidbody2D>();
-	}
+        public Vector2 TargetPosition => new(target.position.x, target.position.y);
+        public Vector2 JumpDirection => new(transform.up.x, transform.up.y);
 
-	public bool IsTargetReached(Vector2 position)
-	{
-		return Vector2.Distance(position, TargetPosition) < distTriggerTreshold;
-	}
+        protected override void Awake()
+        {
+            base.Awake();
+            _rb = GetComponent<Rigidbody2D>();
+        }
 
-	public void Activate()
-	{
-		StartCoroutine(Move());
-	}
+        public bool IsTargetReached(Vector2 position)
+        {
+            return Vector2.Distance(position, TargetPosition) < distTriggerThreshold;
+        }
 
-	IEnumerator Move()
-	{
-		Vector2 initialPosition = transform.position;
-		Vector2 direction = transform.up;
-		Vector2 currentPosition = transform.position;
+        public void Activate()
+        {
+            StartCoroutine(Move());
+        }
 
-		while(Vector2.Distance(initialPosition, currentPosition) < maxDist)
-		{
-			float t = Vector2.Distance(initialPosition, currentPosition) / maxDist;
-			rb.linearVelocity = direction * maxSpeed;
+        private IEnumerator Move()
+        {
+            Vector2 initialPosition = transform.position;
+            Vector2 direction = transform.up;
+            Vector2 currentPosition = transform.position;
 
-			yield return new WaitForFixedUpdate();
-			currentPosition = transform.position;
-		}
-		rb.linearVelocity = Vector2.zero;
+            while (Vector2.Distance(initialPosition, currentPosition) < maxDist)
+            {
+                var t = Vector2.Distance(initialPosition, currentPosition) / maxDist;
+                _rb.linearVelocity = direction * maxSpeed;
 
-		//return to original position
-		rb.linearVelocity = -direction * retreatSpeed;
-		while (true)
-		{
-			if(Vector2.Dot(direction, rb.position - initialPosition) < 0)
-			{
-				rb.linearVelocity = Vector2.zero;
-				rb.position = initialPosition;
-				yield break;
-			}
-			yield return null;
-		}
-	}
+                yield return new WaitForFixedUpdate();
+                currentPosition = transform.position;
+            }
+
+            _rb.linearVelocity = Vector2.zero;
+
+            // return to the original position
+            _rb.linearVelocity = -direction * retreatSpeed;
+            while (true)
+            {
+                if (Vector2.Dot(direction, _rb.position - initialPosition) < 0)
+                {
+                    _rb.linearVelocity = Vector2.zero;
+                    _rb.position = initialPosition;
+                    yield break;
+                }
+
+                yield return null;
+            }
+        }
+    }
 }

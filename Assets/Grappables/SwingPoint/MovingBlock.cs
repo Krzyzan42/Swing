@@ -1,61 +1,66 @@
-using PathCreation;
+using System;
 using System.Collections;
+using Other.Reset;
 using UnityEngine;
 
-public class MovingBlock : Grappable, IResetable
+namespace Grappables.SwingPoint
 {
-	[System.NonSerialized]
-	private new Rigidbody2D rigidbody;
+    public class MovingBlock : Grappable, IResettable
+    {
+        public float correctionRange = 0.2f;
+        public float correctionStrength = 3f;
+        public float speedScale = 20;
+        public AnimationCurve speedCurve;
+        public PathCreation.PathCreator path;
 
-	Coroutine currentRoutine = null;
+        public Transform player;
 
-	public float correctionRange = 0.2f;
-	public float correctionStrength = 3f;
-	public float speedScale = 20;
-	public AnimationCurve speedCurve;
-	public PathCreator path;
+        private Coroutine _currentRoutine;
 
-	public Transform player;
+        [NonSerialized] private Rigidbody2D _rigidbody;
 
-	protected override void Awake()
-	{
-		base.Awake();
-		rigidbody = GetComponent<Rigidbody2D>();
-	}
+        protected override void Awake()
+        {
+            base.Awake();
+            _rigidbody = GetComponent<Rigidbody2D>();
+        }
 
-	public void Reset()
-	{
-		if(currentRoutine != null)
-			StopCoroutine(currentRoutine);
-	}
+        public void Reset()
+        {
+            if (_currentRoutine != null)
+                StopCoroutine(_currentRoutine);
+        }
 
-	protected override void OnGrab()
-	{
-		currentRoutine = StartCoroutine(moveCoroutine());
-	}
+        protected override void OnGrab()
+        {
+            _currentRoutine = StartCoroutine(MoveCoroutine());
+        }
 
-	IEnumerator moveCoroutine()
-	{
-		float t = 0f;
-		while(t < 1f)
-		{
-			t = path.path.GetClosestTimeOnPath(transform.position);
-			Vector3 vel = path.path.GetDirection(t) * speedScale * speedCurve.Evaluate(t);
+        private IEnumerator MoveCoroutine()
+        {
+            var t = 0f;
+            while (t < 1f)
+            {
+                t = path.path.GetClosestTimeOnPath(transform.position);
+                var vel = path.path.GetDirection(t) * speedScale * speedCurve.Evaluate(t);
 
-			float perpendicularness = 1 - Mathf.Abs(Vector3.Dot((player.position - transform.position).normalized, vel.normalized));
-			perpendicularness = Mathf.Clamp(perpendicularness, 1 - correctionRange, 1);
+                var perpendicularness =
+                    1 - Mathf.Abs(Vector3.Dot((player.position - transform.position).normalized, vel.normalized));
+                perpendicularness = Mathf.Clamp(perpendicularness, 1 - correctionRange, 1);
 
-			float strength = reframe(perpendicularness, 1-correctionRange, 1, 1 - correctionStrength, 1f);
+                var strength = Reframe(perpendicularness, 1 - correctionRange, 1, 1 - correctionStrength, 1f);
 
-			rigidbody.linearVelocity = vel * strength;
-			yield return null;
-		}
-		rigidbody.linearVelocity = Vector2.zero;
-	}
+                _rigidbody.linearVelocity = vel * strength;
+                yield return null;
+            }
 
-	float reframe(float x, float startX, float endX, float startY, float endY)
-	{
-		float percentage = (x - startX) / (endX - startX);
-		return startY + percentage * (endY - startY);
-	}
+            _rigidbody.linearVelocity = Vector2.zero;
+        }
+
+        private float Reframe(float x, float startX, float endX, float startY, float endY)
+        {
+            var percentage = (x - startX) / (endX - startX);
+            return startY + percentage * (endY - startY);
+        }
+    }
 }
