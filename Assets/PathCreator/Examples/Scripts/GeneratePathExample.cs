@@ -1,20 +1,19 @@
-﻿using PathCreation;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace PathCreator.Examples.Scripts {
+namespace PathCreation.Examples {
     // Example of creating a path at runtime from a set of points.
 
-    [RequireComponent(typeof(PathCreation.PathCreator))]
+    [RequireComponent(typeof(PathCreator))]
     public class GeneratePathExample : MonoBehaviour {
 
         public bool closedLoop = true;
         public Transform[] waypoints;
 
-        private void Start () {
+        void Start () {
             if (waypoints.Length > 0) {
                 // Create a new bezier path from the waypoints.
-                var bezierPath = new BezierPath (waypoints, closedLoop, PathSpace.xyz);
-                GetComponent<PathCreation.PathCreator> ().bezierPath = bezierPath;
+                BezierPath bezierPath = new BezierPath (waypoints, closedLoop, PathSpace.xyz);
+                GetComponent<PathCreator> ().bezierPath = bezierPath;
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using PathCreation;
-using PathCreator.Examples.Scripts;
 
 namespace PathCreation.Examples
 {
@@ -63,7 +62,7 @@ namespace PathCreation.Examples
         protected virtual void OnEnable()
         {
             pathTool = (PathSceneTool)target;
-            pathTool.OnDestroyed += OnToolDestroyed;
+            pathTool.onDestroyed += OnToolDestroyed;
 
             if (TryFindPathCreator())
             {
