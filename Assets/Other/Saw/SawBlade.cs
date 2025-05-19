@@ -1,15 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SawBlade : MonoBehaviour
+namespace Other.Saw
 {
-    public float speed = 1f;
-
-
-    void Update()
+    public class SawBlade : MonoBehaviour
     {
-        float zRot = transform.rotation.eulerAngles.z;
-        transform.rotation = Quaternion.Euler(0, 0, zRot + speed * 360 * Time.deltaTime);
+        public float speed = 1f;
+
+        private void Update()
+        {
+            var zRot = transform.rotation.eulerAngles.z;
+            transform.rotation = Quaternion.Euler(0, 0, zRot + speed * 360 * Time.deltaTime);
+        }
     }
 }

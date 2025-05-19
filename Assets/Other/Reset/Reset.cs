@@ -1,39 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Reset : MonoBehaviour
+namespace Other.Reset
 {
-    Vector2 initialPosition;
-    Quaternion initialRotation;
-    Vector2 initialVelocity;
-    Rigidbody2D rb;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Reset : MonoBehaviour
     {
-        initialPosition = transform.position;
-        initialRotation = transform.rotation;
-        rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-            initialVelocity = rb.linearVelocity;
-    }
+        private Vector2 _initialPosition;
+        private Quaternion _initialRotation;
+        private Vector2 _initialVelocity;
+        private Rigidbody2D _rb;
+        private IResettable[] _resettableComponents;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKey(KeyCode.R))
-		{
-            transform.position = initialPosition;
-            transform.rotation = initialRotation;
-            if(rb != null)
-                rb.linearVelocity = initialVelocity;
+        private void Start()
+        {
+            _resettableComponents = GetComponents<IResettable>();
+            _initialPosition = transform.position;
+            _initialRotation = transform.rotation;
+            _rb = GetComponent<Rigidbody2D>();
+            if (_rb)
+                _initialVelocity = _rb.linearVelocity;
+        }
 
-            var resetableComponents = GetComponents<IResetable>();
-			foreach (var resetable in resetableComponents)
-			{
-                resetable.Reset();
-			}
-		}
+        private void Update()
+        {
+            if (!Input.GetKey(KeyCode.R)) return;
+
+            transform.position = _initialPosition;
+            transform.rotation = _initialRotation;
+            if (_rb)
+                _rb.linearVelocity = _initialVelocity;
+
+            foreach (var resettable in _resettableComponents) resettable.Reset();
+        }
     }
 }

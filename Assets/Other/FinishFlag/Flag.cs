@@ -1,28 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using Other.Reset;
+using Player;
 using UnityEngine;
 
-[RequireComponent(typeof(Reset))]
-public class Flag : MonoBehaviour, IResetable
+namespace Other.FinishFlag
 {
-    private BoxCollider2D boxCollider;
-	private new SpriteRenderer renderer;
+    [RequireComponent(typeof(Reset.Reset))]
+    public class Flag : MonoBehaviour, IResettable
+    {
+        private BoxCollider2D _boxCollider;
+        private SpriteRenderer _renderer;
 
-	public void Reset()
-	{
-		renderer.color = Color.white;
-	}
+        private void Awake()
+        {
+            _renderer = GetComponent<SpriteRenderer>();
+        }
 
-	private void Awake()
-	{
-		renderer = GetComponent<SpriteRenderer>();
-	}
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.GetComponent<Character>()) _renderer.color = Color.green;
+        }
 
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if(collision.GetComponent<CharacterController>() != null)
-		{
-			renderer.color = Color.green;
-		}
-	}
+        public void Reset()
+        {
+            _renderer.color = Color.white;
+        }
+    }
 }

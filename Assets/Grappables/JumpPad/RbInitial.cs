@@ -1,21 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
+using Other.Reset;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Reset))]
-[RequireComponent(typeof(Rigidbody2D))]
-public class RbInitial : MonoBehaviour, IResetable
+namespace Grappables.JumpPad
 {
-    public Vector2 initalVelocity;
-
-	public void Reset()
-	{
-        GetComponent<Rigidbody2D>().linearVelocity = initalVelocity;
-	}
-
-	// Start is called before the first frame update
-	void Start()
+    [RequireComponent(typeof(Reset))]
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class RbInitial : MonoBehaviour, IResettable
     {
-        Reset();
+        [FormerlySerializedAs("initalVelocity")]
+        public Vector2 initialVelocity;
+
+        private Rigidbody2D _rigidbody2D;
+
+        private void Awake()
+        {
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+
+        // Start is called before the first frame update
+        private void Start()
+        {
+            Reset();
+        }
+
+        public void Reset()
+        {
+            _rigidbody2D.linearVelocity = initialVelocity;
+        }
     }
 }

@@ -2,35 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrappleManager : MonoBehaviour, IEnumerable
+namespace Grappables
 {
-    private List<Grappable> grappables = new List<Grappable>();
-
-    public void AddGrappable(Grappable grappable)
+	public class GrappleManager : MonoBehaviour, IEnumerable
 	{
-		grappables.Add(grappable);
-	}
+		private List<Grappable> _grappables = new List<Grappable>();
 
-	public IEnumerator GetEnumerator()
-	{
-		return grappables.GetEnumerator();
-	}
-
-	public Grappable FindClosestGrapplePoint(Vector2 position)
-	{
-		Grappable best = null;
-		float minDist = float.MaxValue;
-
-		foreach (var grapable in grappables)
+		public void AddGrappable(Grappable grappable)
 		{
-			float dist = Vector2.Distance(position, grapable.position2D);
-			if(dist < minDist)
-			{
-				best = grapable;
-				minDist = dist;
-			}
+			_grappables.Add(grappable);
 		}
 
-		return best;
+		public IEnumerator GetEnumerator()
+		{
+			return _grappables.GetEnumerator();
+		}
+
+		public Grappable FindClosestGrapplePoint(Vector2 position)
+		{
+			Grappable best = null;
+			var minDist = float.MaxValue;
+
+			foreach (var grapable in _grappables)
+			{
+				var dist = Vector2.Distance(position, grapable.Position2D);
+				if(dist < minDist)
+				{
+					best = grapable;
+					minDist = dist;
+				}
+			}
+
+			return best;
+		}
 	}
 }
