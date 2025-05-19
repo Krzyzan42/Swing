@@ -2,42 +2,46 @@ using UnityEngine;
 
 namespace Grappables
 {
-	[RequireComponent(typeof(Rigidbody2D))]
-	public abstract class Grappable : MonoBehaviour
-	{
-		private new Rigidbody2D _rigidbody;
-		private GrappleManager _grappleManager;
+    [RequireComponent(typeof(Rigidbody2D))]
+    public abstract class Grappable : MonoBehaviour
+    {
+        private GrappleManager _grappleManager;
+        private Rigidbody2D _rigidbody;
 
-		public Vector2 Position2D => new Vector2(transform.position.x, transform.position.y);
+        public Vector2 Position2D => new(transform.position.x, transform.position.y);
 
-		protected virtual void Awake()
-		{
-			_rigidbody = GetComponent<Rigidbody2D>();
-		}
+        protected virtual void Awake()
+        {
+            _rigidbody = GetComponent<Rigidbody2D>();
+        }
 
-		protected virtual void Start()
-		{
-			_grappleManager = FindObjectOfType<GrappleManager>();
-			_grappleManager.AddGrappable(this);
-		}
+        protected virtual void Start()
+        {
+            _grappleManager = FindAnyObjectByType<GrappleManager>();
+            _grappleManager.AddGrappable(this);
+        }
 
-		public void Grab(Joint2D joint)
-		{
-			joint.connectedBody = _rigidbody;
-			joint.enabled = true;
+        public void Grab(Joint2D joint)
+        {
+            joint.connectedBody = _rigidbody;
+            joint.enabled = true;
 
-			OnGrab();
-		}
+            OnGrab();
+        }
 
-		public void Release(Joint2D joint)
-		{
-			joint.enabled = false;
+        public void Release(Joint2D joint)
+        {
+            joint.enabled = false;
 
-			OnRelease();
-		}
+            OnRelease();
+        }
 
-		protected virtual void OnGrab() { }
+        protected virtual void OnGrab()
+        {
+        }
 
-		protected virtual void OnRelease() { }
-	}
+        protected virtual void OnRelease()
+        {
+        }
+    }
 }

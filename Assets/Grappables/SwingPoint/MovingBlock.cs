@@ -17,7 +17,7 @@ namespace Grappables.SwingPoint
 
         private Coroutine _currentRoutine;
 
-        [NonSerialized] private new Rigidbody2D _rigidbody;
+        [NonSerialized] private Rigidbody2D _rigidbody;
 
         protected override void Awake()
         {

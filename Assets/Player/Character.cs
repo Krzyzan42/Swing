@@ -13,6 +13,8 @@ namespace Player
 
         private GrappleManager _grappleManager;
         private CharacterPhysics _gravity;
+
+        private float _gravityMultiplier = 1;
         private DistanceJoint2D _joint;
         private JumpPadPhysics _padPhysics;
 
@@ -57,9 +59,14 @@ namespace Player
         private void FixedUpdate()
         {
             if (_rb.linearVelocity.y > 0 && IsGrabbed() && !IsAboveGrabbedObject())
-                _gravity.GravityScale = grabGravityScale;
+                _gravity.GravityScale = grabGravityScale * _gravityMultiplier;
             else
-                _gravity.GravityScale = 1;
+                _gravity.GravityScale = 1 * _gravityMultiplier;
+        }
+
+        public void SetGravityMultiplier(float multiplier)
+        {
+            _gravityMultiplier = multiplier;
         }
 
         private bool IsGrabbed()
