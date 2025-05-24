@@ -17,8 +17,8 @@ namespace Enemies
         [Inject]
         public Character Player { get; private set; }
 
-        public EnemyState WaitingForSightState => new WaitingForSightState(_machine, this, sightRange);
-        public EnemyState AimingAtPlayer => new AimingAtPlayer(_machine, this, sightRange, aimingTime);
+        public EnemyState WaitingForSightState => new WaitingForSightState(_machine, this);
+        public EnemyState AimingAtPlayer => new AimingAtPlayer(_machine, this, aimingTime);
 
         private void Start()
         {
@@ -37,6 +37,25 @@ namespace Enemies
 
             var directionToPlayer = Player.transform.position - transform.position;
             projectile.GetComponent<Projectile>().ShootAt(directionToPlayer);
+        }
+
+        public bool SeesPlayer()
+        {
+            var player = Player;
+
+            if (!player) return false;
+
+            var distance = Vector3.Distance(player.transform.position, transform.position);
+
+            if (distance > sightRange) return false;
+
+            var directionToPlayer = (player.transform.position - transform.position).normalized;
+
+            var hit = Physics2D.Raycast(transform.position, directionToPlayer);
+
+            if (!hit || !hit.transform.CompareTag("Player")) return false;
+
+            return true;
         }
     }
 }
