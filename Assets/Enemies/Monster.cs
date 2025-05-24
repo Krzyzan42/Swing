@@ -18,7 +18,7 @@ namespace Enemies
         public Character Player { get; private set; }
 
         public EnemyState WaitingForSightState => new WaitingForSightState(_machine, this);
-        public EnemyState AimingAtPlayer => new AimingAtPlayer(_machine, this, aimingTime);
+        public EnemyState AimingAtPlayer => new AimingAtPlayerState(_machine, this, aimingTime);
 
         private void Start()
         {

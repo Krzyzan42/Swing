@@ -2,13 +2,13 @@
 
 namespace Enemies.StateMachine
 {
-    public class AimingAtPlayer : EnemyState
+    public class AimingAtPlayerState : EnemyState
     {
         private readonly float _timeToShoot;
 
         private float _timeLeftToShoot;
 
-        public AimingAtPlayer(EnemyStateMachine machine, Monster monster,
+        public AimingAtPlayerState(EnemyStateMachine machine, Monster monster,
             float timeToShoot) : base(machine, monster)
         {
             _timeToShoot = timeToShoot;
