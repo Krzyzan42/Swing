@@ -2,6 +2,7 @@ using System.Collections;
 using Grappables;
 using Grappables.JumpPad;
 using Grappables.SwingPoint;
+using Other;
 using Other.Rope;
 using UnityEngine;
 
@@ -90,6 +91,12 @@ namespace Player
 
             point.Release(_joint);
             _target = null;
+        }
+
+        public void HandleDeath()
+        {
+            // todo get level
+            SceneLoader.LoadLevel(1);
         }
     }
 }
