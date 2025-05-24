@@ -23,7 +23,11 @@ namespace Enemies.StateMachine
         public override void LogicUpdate()
         {
             var seesPlayer = Monster.SeesPlayer();
-            if (!seesPlayer) Machine.ChangeState(Monster.WaitingForSightState);
+            if (!seesPlayer)
+            {
+                Machine.ChangeState(Monster.WaitingForSightState);
+                return;
+            }
 
             _timeLeftToShoot -= Time.deltaTime;
 
