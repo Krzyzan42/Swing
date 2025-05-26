@@ -1,13 +1,18 @@
 using System.Collections;
+using Other.Reset;
+using Player;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Grappables.JumpPad
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class JumpPad : Grappable
+    public class JumpPad : Grappable, IResettable
     {
         public Transform target;
+
+        [FormerlySerializedAs("jumppadSpeedChange")]
+        public AnimationCurve jumpPadSpeedChange;
 
         [FormerlySerializedAs("distTriggerTreshold")]
         public float distTriggerThreshold = 0.04f;
@@ -17,9 +22,15 @@ namespace Grappables.JumpPad
         public float maxDist;
         public float retreatSpeed = 2f;
         private Rigidbody2D _rb;
+        public float maxApproachSpeed = 20;
+        public float velocitySaveDist = 1f;
+        public float maxGrappleDistance = 3f;
 
         public Vector2 TargetPosition => new(target.position.x, target.position.y);
         public Vector2 JumpDirection => new(transform.up.x, transform.up.y);
+
+        private bool _canBeReleased = false;
+        private bool _canBeGrabbed = true;
 
         protected override void Awake()
         {
@@ -45,7 +56,6 @@ namespace Grappables.JumpPad
 
             while (Vector2.Distance(initialPosition, currentPosition) < maxDist)
             {
-                var t = Vector2.Distance(initialPosition, currentPosition) / maxDist;
                 _rb.linearVelocity = direction * maxSpeed;
 
                 yield return new WaitForFixedUpdate();
@@ -62,11 +72,83 @@ namespace Grappables.JumpPad
                 {
                     _rb.linearVelocity = Vector2.zero;
                     _rb.position = initialPosition;
+                    _canBeGrabbed = true;
                     yield break;
                 }
 
                 yield return null;
             }
         }
-    }
+
+		public override bool Grab(SwingBody body)
+		{
+            if (!CanGrab(body))
+                return false;
+            if ((transform.position - body.transform.position).magnitude > maxGrappleDistance)
+                return false;
+            _canBeReleased = false;
+            _canBeGrabbed = false;
+            StartCoroutine(JumpOffCoroutine(body));
+            return true;
+		}
+
+		public override bool CanGrab(SwingBody body)
+		{
+            if (!_canBeGrabbed) return false;
+            Vector3 bodyDir = (body.transform.position - transform.position).normalized;
+            float dot = Vector3.Dot(transform.up, bodyDir);
+            print(dot);
+            return dot > 0.2f;
+		}
+
+		public override bool Release()
+		{
+            return _canBeReleased;
+		}
+
+        private SwingBody _current;
+        private IEnumerator JumpOffCoroutine(SwingBody swingBody)
+        {
+            float t = 0;
+            Rigidbody2D rb = swingBody.GetComponent<Rigidbody2D>();
+            var initial = rb.linearVelocity;
+            Vector2 _savedVelocity = Vector2.zero;
+            _current = swingBody;
+
+            while (t < 1 && !IsTargetReached(rb.position))
+            {
+                var dir = (TargetPosition - swingBody.Position2D).normalized;
+                var vel = Vector2.Lerp(initial, dir * maxApproachSpeed, jumpPadSpeedChange.Evaluate(t));
+
+                if (Vector2.Distance(TargetPosition, swingBody.Position2D) < velocitySaveDist &&
+                    _savedVelocity == Vector2.zero)
+                {
+                    var perp = Vector2.Perpendicular(JumpDirection).normalized;
+                    _savedVelocity = Vector2.Dot(perp, vel) * perp;
+                }
+
+                rb.linearVelocity = vel;
+                t += Time.fixedDeltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+
+            _canBeReleased = true;
+            swingBody.BreakGrapple();
+            _current = null;
+            Activate();
+            rb.linearVelocity = maxSpeed * JumpDirection + _savedVelocity;
+        }
+
+		public void Reset()
+		{
+            StopAllCoroutines();
+            _canBeGrabbed = true;
+            _canBeReleased = true;
+            if (_current)
+            {
+                _current.BreakGrapple();
+                _current = null;
+            }
+		}
+	}
 }

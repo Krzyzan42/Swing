@@ -16,13 +16,16 @@ namespace Statics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Player")) collision.GetComponent<Character>().SetGravityMultiplier(0);
+            Debug.Log(collision.CompareTag("Player"));
+
+            // if (collision.CompareTag("Player")) collision.GetComponent<Character>().SetGravityMultiplier(0);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.CompareTag("Player"))
-                collision.GetComponent<Character>().SetGravityMultiplier(1);
+            // Debug.Log("Exit");
+            // if (collision.CompareTag("Player"))
+            //     collision.GetComponent<Character>().SetGravityMultiplier(1);
         }
     }
 }
