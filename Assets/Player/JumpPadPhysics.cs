@@ -17,8 +17,7 @@ namespace Player
         private Vector2 _savedVelocity;
 
         public Vector2 Position2D => new(transform.position.x, transform.position.y);
-
-
+        
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
