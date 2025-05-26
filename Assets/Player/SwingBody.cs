@@ -1,9 +1,12 @@
+using Grappables;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class CharacterPhysics : MonoBehaviour
+    public class SwingBody : MonoBehaviour
     {
         [Range(0f, 1f)] [SerializeField] private float fallAccelerationTime;
 
@@ -16,16 +19,63 @@ namespace Player
         [Range(0, 20)] [SerializeField] private float maxHorizontalVel = 5;
 
         private Rigidbody2D _rb;
+        private GrappleManager _grappleManager;
+        private Grappable _currentGrapple = null;
 
         public bool EnableGravity { get; set; } = true;
         public float GravityScale { get; set; } = 1f;
         public bool EnableFallDrag { get; set; } = true;
         public float FallDragScale { get; set; } = 1f;
+        public bool GrapplePossible { get; set; } = true;
+        public bool IsGrappled => _currentGrapple != null;
+        public Vector2 Position2D => new(transform.position.x, transform.position.y);
+
+        public UnityEvent<Grappable> GrappleConnected = new();
+        public UnityEvent<Grappable> GrappleDisconnected = new();
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
+            _grappleManager = FindAnyObjectByType<GrappleManager>();
         }
+
+        public bool Grapple(Grappable point)
+        {
+            if (!CanGrapple(point))
+                return false;
+            bool success = point.Grab(this);
+            if (success)
+            {
+                _currentGrapple = point;
+                GrappleConnected.Invoke(_currentGrapple);
+            }
+            return success;
+        }
+
+        public bool CanGrapple(Grappable point)
+        {
+            if (!IsGrappled && GrapplePossible)
+                return point.CanGrab(this);
+            else
+                return false;
+        }
+
+        public bool BreakGrapple()
+        {
+            bool success = false;
+            if (_currentGrapple != null)
+            {
+                success = _currentGrapple.Release();
+                if (success)
+                {
+                    Grappable temp = _currentGrapple;
+                    _currentGrapple = null;
+                    GrappleDisconnected.Invoke(temp);
+                }
+            }
+            return success;
+        }
+
 
         private void FixedUpdate()
         {

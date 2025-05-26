@@ -1,7 +1,5 @@
 using System.Collections;
 using Grappables;
-using Grappables.JumpPad;
-using Grappables.SwingPoint;
 using Other.Rope;
 using UnityEngine;
 
@@ -12,26 +10,16 @@ namespace Player
         [Range(0, 1)] public float grabGravityScale;
 
         private GrappleManager _grappleManager;
-        private CharacterPhysics _gravity;
+        private SwingBody _swingBody;
 
-        private float _gravityMultiplier = 1;
-        private DistanceJoint2D _joint;
-        private JumpPadPhysics _padPhysics;
-
-        // References to other components
-        private Rigidbody2D _rb;
         private RopeAnimation _rope;
-        private Grappable _target;
 
         public Vector2 Position2D => new(transform.position.x, transform.position.y);
 
         private void Start()
         {
-            _rb = GetComponent<Rigidbody2D>();
-            _joint = GetComponent<DistanceJoint2D>();
             _grappleManager = FindAnyObjectByType<GrappleManager>();
-            _gravity = GetComponent<CharacterPhysics>();
-            _padPhysics = GetComponent<JumpPadPhysics>();
+            _swingBody = GetComponent<SwingBody>();
             _rope = GetComponentInChildren<RopeAnimation>();
         }
 
@@ -39,57 +27,18 @@ namespace Player
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _target = _grappleManager.FindClosestGrapplePoint(_rb.position);
-                switch (_target)
+                Grappable _target = _grappleManager.FindClosestGrapplePoint(transform.position);
+                if (_swingBody.Grapple(_target))
                 {
-                    case MovingBlock block:
-                        StartCoroutine(GrabSwingPoint(block));
-                        break;
-                    case JumpPad pad:
-                        _padPhysics.JumpOff(pad);
-                        break;
+                    _rope.Attach(transform, _target.transform);
                 }
-
-                _rope.Attach(transform, _target.transform);
             }
 
-            if (Input.GetKeyUp(KeyCode.Space)) _rope.Deattach();
-        }
-
-        private void FixedUpdate()
-        {
-            if (_rb.linearVelocity.y > 0 && IsGrabbed() && !IsAboveGrabbedObject())
-                _gravity.GravityScale = grabGravityScale * _gravityMultiplier;
-            else
-                _gravity.GravityScale = 1 * _gravityMultiplier;
-        }
-
-        public void SetGravityMultiplier(float multiplier)
-        {
-            _gravityMultiplier = multiplier;
-        }
-
-        private bool IsGrabbed()
-        {
-            return _joint.connectedBody && _joint.isActiveAndEnabled;
-        }
-
-        private bool IsAboveGrabbedObject()
-        {
-            var dist = _joint.connectedBody.transform.position - transform.position;
-            return Vector2.Dot(new Vector2(dist.x, dist.y), Vector2.up) < 0;
-        }
-
-        private IEnumerator GrabSwingPoint(MovingBlock point)
-        {
-            point.Grab(_joint);
-            do
+            if (Input.GetKeyUp(KeyCode.Space))
             {
-                yield return new WaitForFixedUpdate();
-            } while (Input.GetKey(KeyCode.Space));
-
-            point.Release(_joint);
-            _target = null;
+                _rope.Deattach();
+                _swingBody.BreakGrapple();
+            } 
         }
     }
 }

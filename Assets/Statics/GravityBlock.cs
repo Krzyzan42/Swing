@@ -18,14 +18,14 @@ namespace Statics
         {
             Debug.Log(collision.CompareTag("Player"));
 
-            if (collision.CompareTag("Player")) collision.GetComponent<Character>().SetGravityMultiplier(0);
+            // if (collision.CompareTag("Player")) collision.GetComponent<Character>().SetGravityMultiplier(0);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            Debug.Log("Exit");
-            if (collision.CompareTag("Player"))
-                collision.GetComponent<Character>().SetGravityMultiplier(1);
+            // Debug.Log("Exit");
+            // if (collision.CompareTag("Player"))
+            //     collision.GetComponent<Character>().SetGravityMultiplier(1);
         }
     }
 }
