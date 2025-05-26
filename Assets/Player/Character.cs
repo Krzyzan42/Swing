@@ -12,6 +12,8 @@ namespace Player
     {
         [Range(0, 1)] public float grabGravityScale;
 
+        [SerializeField] private GameObject grappleIndicator;
+
         private GrappleManager _grappleManager;
         private CharacterPhysics _gravity;
 
@@ -19,7 +21,6 @@ namespace Player
         private DistanceJoint2D _joint;
         private JumpPadPhysics _padPhysics;
 
-        // References to other components
         private Rigidbody2D _rb;
         private RopeAnimation _rope;
         private Grappable _target;
@@ -41,6 +42,7 @@ namespace Player
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _target = _grappleManager.FindClosestGrapplePoint(_rb.position);
+
                 switch (_target)
                 {
                     case MovingBlock block:
@@ -53,8 +55,13 @@ namespace Player
 
                 _rope.Attach(transform, _target.transform);
             }
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                _rope.Deattach();
+            }
 
-            if (Input.GetKeyUp(KeyCode.Space)) _rope.Deattach();
+            _target = _grappleManager.FindClosestGrapplePoint(_rb.position);
+            if (_target) grappleIndicator.transform.position = _target.transform.position;
         }
 
         private void FixedUpdate()

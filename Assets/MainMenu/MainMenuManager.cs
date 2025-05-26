@@ -1,26 +1,17 @@
 using Other;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MainMenu
 {
     public class MainMenuManager : MonoBehaviour
     {
-        public Button startBtn, exitBtn;
-
-        private void Start()
+        public void SelectLevel(int levelIndex)
         {
-            startBtn.onClick.AddListener(StartGame);
-            exitBtn.onClick.AddListener(ExitGame);
+            SceneLoader.LoadLevel(levelIndex);
         }
 
-        private static void StartGame()
-        {
-            SceneLoader.LoadLevel(1);
-        }
-
-        private static void ExitGame()
+        public void ExitGame()
         {
             Application.Quit();
             EditorApplication.ExitPlaymode();
