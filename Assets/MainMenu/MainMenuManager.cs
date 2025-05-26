@@ -7,17 +7,16 @@ namespace MainMenu
 {
     public class MainMenuManager : MonoBehaviour
     {
-        public Button startBtn, exitBtn;
+        public Button exitBtn;
 
         private void Start()
         {
-            startBtn.onClick.AddListener(StartGame);
             exitBtn.onClick.AddListener(ExitGame);
         }
 
-        private static void StartGame()
+        public void SelectLevel(int levelIndex)
         {
-            SceneLoader.LoadLevel(1);
+            SceneLoader.LoadLevel(levelIndex);
         }
 
         private static void ExitGame()
