@@ -18,14 +18,23 @@ namespace Statics
         {
             Debug.Log(collision.CompareTag("Player"));
 
-            // if (collision.CompareTag("Player")) collision.GetComponent<Character>().SetGravityMultiplier(0);
+            SwingBody body = collision.gameObject.GetComponent<SwingBody>();
+            if (body)
+            {
+                body.GrapplePossible = false;
+                body.BreakGrapple();
+                body.GravityScale = 0;
+            }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            // Debug.Log("Exit");
-            // if (collision.CompareTag("Player"))
-            //     collision.GetComponent<Character>().SetGravityMultiplier(1);
+            SwingBody body = collision.gameObject.GetComponent<SwingBody>();
+            if (body)
+            {
+                body.GrapplePossible = true;
+                body.GravityScale = 1;
+            }
         }
     }
 }

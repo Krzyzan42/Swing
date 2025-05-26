@@ -90,8 +90,8 @@ Material:
     - _UVSec: 0
     - _UseTextureDistortion: 0
     - _WarpFrequency: 20
-    - _WarpSpeed: 0.1
-    - _WarpStrength: 0.0267
+    - _WarpSpeed: 0.32
+    - _WarpStrength: 0.0059
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
