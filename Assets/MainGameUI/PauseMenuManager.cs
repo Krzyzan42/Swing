@@ -9,10 +9,15 @@ namespace MainGameUI
     {
         [SerializeField] private TextMeshProUGUI timeText;
         [SerializeField] private GameObject pauseMenu;
+        private float _lastDisplayedTime = -1f;
 
         private void Update()
         {
-            timeText.SetText(Time.time.ToString(CultureInfo.InvariantCulture));
+            var currentTime = Time.time;
+            if (!(Mathf.Abs(currentTime - _lastDisplayedTime) >= 0.01f)) return;
+
+            timeText.SetText($"Time {currentTime.ToString("0.00", CultureInfo.InvariantCulture)}");
+            _lastDisplayedTime = currentTime;
         }
 
         public void EnablePauseMenu()

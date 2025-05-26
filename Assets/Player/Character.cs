@@ -54,18 +54,14 @@ namespace Player
                 }
 
                 _rope.Attach(transform, _target.transform);
-
-                return;
             }
-
-            if (Input.GetKeyUp(KeyCode.Space))
+            else if (Input.GetKeyUp(KeyCode.Space))
             {
                 _rope.Deattach();
-                return;
             }
 
             _target = _grappleManager.FindClosestGrapplePoint(_rb.position);
-            grappleIndicator.transform.position = _target.transform.position;
+            if (_target) grappleIndicator.transform.position = _target.transform.position;
         }
 
         private void FixedUpdate()

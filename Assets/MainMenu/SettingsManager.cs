@@ -23,6 +23,7 @@ namespace MainMenu
 
         public void DisableSettingsMenu()
         {
+            PlayerPrefs.Save();
             settings.SetActive(false);
         }
     }
