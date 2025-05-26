@@ -39,7 +39,7 @@ namespace EasyHighScore
             provider.transform.SetParent(transform);
 
             env.TryParseEnvironmentVariable("LEADERBOARD_ID", out int leaderboardID);
-            env.TryParseEnvironmentVariable("LEADERBOARD_ID", out string leaderboardSecret);
+            env.TryParseEnvironmentVariable("LEADERBOARD_SECRET", out string leaderboardSecret);
 
             var adapter = provider.AddComponent<DinoLeaderboardAdapter>();
             adapter.Initialize(
