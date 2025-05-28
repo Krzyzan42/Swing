@@ -447,6 +447,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4737521274368785294, guid: 12bfdfda8020af74fbe5c2d9032baf9c, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737521274368785294, guid: 12bfdfda8020af74fbe5c2d9032baf9c, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199534599
+      objectReference: {fileID: 0}
     - target: {fileID: 8305128308037845123, guid: 12bfdfda8020af74fbe5c2d9032baf9c, type: 3}
       propertyPath: m_Parameters.colorGradient.ctime1
       value: 65535
