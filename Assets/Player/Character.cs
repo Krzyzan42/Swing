@@ -11,6 +11,9 @@ namespace Player
         [Range(0, 1)] public float grabGravityScale;
 
         [SerializeField] [CanBeNull] private GameObject grappleIndicatorPrefab;
+
+        [SerializeField] private CharacterInput characterInput;
+
         [CanBeNull] private GameObject _grappleIndicator;
 
         private GrappleManager _grappleManager;
@@ -33,17 +36,18 @@ namespace Player
 
         private void Update()
         {
+            // I wanted to include a new input system but it is broken xd
             var target = _grappleManager.FindClosestGrapplePoint(transform.position);
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (characterInput.IsGrabDown)
             {
                 if (_swingBody.Grapple(target)) _rope.Attach(transform, target.transform);
             }
-            else if (Input.GetKeyUp(KeyCode.Space))
+            else if (characterInput.IsGrabUp)
             {
                 _rope.Deattach();
             }
 
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (characterInput.IsGrabUp)
             {
                 _rope.Deattach();
                 _swingBody.BreakGrapple();
