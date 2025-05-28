@@ -47,7 +47,7 @@ namespace Grappables
 
             foreach (var grappable in _grappables)
             {
-                if (!grappable.CanGrab(swingBody)) continue;
+                if (!swingBody.CanGrapple(grappable)) continue;
 
                 var dist = Vector2.Distance(position, grappable.Position2D);
 
