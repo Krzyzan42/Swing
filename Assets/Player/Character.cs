@@ -55,7 +55,7 @@ namespace Player
         public void HandleDeath()
         {
             // todo get level
-            SceneLoader.LoadLevel(1);
+            SceneLoader.ReloadScene();
         }
     }
 }
