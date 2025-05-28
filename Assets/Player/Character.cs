@@ -20,7 +20,7 @@ namespace Player
 
         private GrappleManager _grappleManager;
 
-        [Inject] private PlayerDeathEventChannelSO _playerDeathEventChannel;
+        [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
 
         private RopeAnimation _rope;
         private SwingBody _swingBody;
@@ -61,7 +61,7 @@ namespace Player
             UpdateGrappleIndicator(target);
         }
 
-        private void UpdateGrappleIndicator(Grappable target)
+        private void UpdateGrappleIndicator([CanBeNull] Grappable target)
         {
             if (_grappleIndicator && target)
             {

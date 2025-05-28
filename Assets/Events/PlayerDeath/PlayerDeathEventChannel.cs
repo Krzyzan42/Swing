@@ -4,15 +4,10 @@ using UnityEngine.Events;
 
 namespace Events.PlayerDeath
 {
-    [Serializable]
-    public class UnityPlayerDeathEvent : UnityEvent<DeathData>
-    {
-    }
-
     [CreateAssetMenu(menuName = "Events/Player Death Event Channel")]
-    public class PlayerDeathEventChannelSO : ScriptableObject
+    public class PlayerDeathEventChannel : ScriptableObject
     {
-        public UnityPlayerDeathEvent onEventRaisedUnityEvent;
+        public UnityEvent<DeathData> onEventRaisedUnityEvent;
         private event Action<DeathData> OnEventRaised;
 
         public void RaiseEvent(DeathData data)

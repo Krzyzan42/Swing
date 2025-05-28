@@ -1,4 +1,5 @@
 using System;
+using Events.FlagReached;
 using Events.PlayerDeath;
 using Other;
 using UnityEngine;
@@ -26,18 +27,21 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private MultiplayerMode multiplayerMode;
 
 
-    private bool _aPlayerHasDied;
+    private bool _atLeastOnePlayerHasDied;
+    [Inject] private FlagReachedEventChannel _flagReachedEventChannel;
 
-    [Inject] private PlayerDeathEventChannelSO _playerDeathEventChannel;
+    [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
 
     private void OnEnable()
     {
         _playerDeathEventChannel.RegisterListener(HandlePlayerDeath);
+        _flagReachedEventChannel.RegisterListener(HandleFlagReached);
     }
 
     private void OnDisable()
     {
         _playerDeathEventChannel.UnregisterListener(HandlePlayerDeath);
+        _flagReachedEventChannel.UnregisterListener(HandleFlagReached);
     }
 
     public void LevelFinished()
@@ -61,16 +65,21 @@ public class LevelManager : MonoBehaviour
     {
         if (multiplayerMode == MultiplayerMode.MultiplayerCompetitive)
         {
-            if (_aPlayerHasDied)
+            if (_atLeastOnePlayerHasDied)
             {
                 SceneLoader.ReloadScene();
                 return;
             }
 
-            _aPlayerHasDied = true;
+            _atLeastOnePlayerHasDied = true;
             return;
         }
 
         SceneLoader.ReloadScene();
+    }
+
+    public void HandleFlagReached(FlagReachedData flagReachedData)
+    {
+        LevelFinished();
     }
 }

@@ -1,6 +1,8 @@
+using Events.FlagReached;
 using Other.Reset;
 using Player;
 using UnityEngine;
+using Zenject;
 
 namespace Other.FinishFlag
 {
@@ -8,6 +10,8 @@ namespace Other.FinishFlag
     public class Flag : MonoBehaviour, IResettable
     {
         private BoxCollider2D _boxCollider;
+
+        [Inject] private FlagReachedEventChannel _flagReachedEventChannel;
         private SpriteRenderer _renderer;
 
         private void Awake()
@@ -17,7 +21,12 @@ namespace Other.FinishFlag
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.GetComponent<Character>()) _renderer.color = Color.green;
+            var character = collision.GetComponent<Character>();
+
+            if (!character) return;
+
+            _flagReachedEventChannel.RaiseEvent(new FlagReachedData(character));
+            _renderer.color = Color.green;
         }
 
         public void Reset()
