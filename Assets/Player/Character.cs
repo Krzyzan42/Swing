@@ -1,13 +1,15 @@
+using Events.PlayerDeath;
 using Grappables;
 using JetBrains.Annotations;
-using Other;
 using Other.Rope;
 using UnityEngine;
+using Zenject;
 
 namespace Player
 {
     public class Character : MonoBehaviour
     {
+        // will this be used?
         [Range(0, 1)] public float grabGravityScale;
 
         [SerializeField] [CanBeNull] private GameObject grappleIndicatorPrefab;
@@ -17,6 +19,8 @@ namespace Player
         [CanBeNull] private GameObject _grappleIndicator;
 
         private GrappleManager _grappleManager;
+
+        [Inject] private PlayerDeathEventChannelSO _playerDeathEventChannel;
 
         private RopeAnimation _rope;
         private SwingBody _swingBody;
@@ -72,8 +76,8 @@ namespace Player
 
         public void HandleDeath()
         {
-            // todo get level
-            SceneLoader.ReloadScene();
+            _playerDeathEventChannel.RaiseEvent(new DeathData(this));
+            Destroy(gameObject);
         }
     }
 }
