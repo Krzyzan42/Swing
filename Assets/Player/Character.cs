@@ -36,6 +36,7 @@ namespace Player
         private RopeAnimation _rope;
         private SwingBody _swingBody;
         public Vector2 Position2D => new(transform.position.x, transform.position.y);
+        public Vector2 Velocity => _swingBody.Velocity;
 
         private void Start()
         {

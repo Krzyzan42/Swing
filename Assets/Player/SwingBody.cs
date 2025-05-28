@@ -1,5 +1,4 @@
 using Grappables;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,9 +17,12 @@ namespace Player
 
         [Range(0, 20)] [SerializeField] private float maxHorizontalVel = 5;
 
-        private Rigidbody2D _rb;
+        public UnityEvent<Grappable> GrappleConnected = new();
+        public UnityEvent<Grappable> GrappleDisconnected = new();
+        private Grappable _currentGrapple;
         private GrappleManager _grappleManager;
-        private Grappable _currentGrapple = null;
+
+        private Rigidbody2D _rb;
 
         public bool EnableGravity { get; set; } = true;
         public float GravityScale { get; set; } = 1f;
@@ -28,51 +30,13 @@ namespace Player
         public float FallDragScale { get; set; } = 1f;
         public bool GrapplePossible { get; set; } = true;
         public bool IsGrappled => _currentGrapple != null;
+        public Vector2 Velocity => _rb.linearVelocity;
         public Vector2 Position2D => new(transform.position.x, transform.position.y);
-
-        public UnityEvent<Grappable> GrappleConnected = new();
-        public UnityEvent<Grappable> GrappleDisconnected = new();
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _grappleManager = FindAnyObjectByType<GrappleManager>();
-        }
-
-        public bool Grapple(Grappable point)
-        {
-            if (!CanGrapple(point))
-                return false;
-            bool success = point.Grab(this);
-            if (success)
-            {
-                _currentGrapple = point;
-                GrappleConnected.Invoke(_currentGrapple);
-            }
-            return success;
-        }
-
-        public bool CanGrapple(Grappable point)
-        {
-            if (!IsGrappled && GrapplePossible)
-                return point.CanGrab(this);
-            return false;
-        }
-
-        public bool BreakGrapple()
-        {
-            bool success = false;
-            if (_currentGrapple != null)
-            {
-                success = _currentGrapple.Release();
-                if (success)
-                {
-                    Grappable temp = _currentGrapple;
-                    _currentGrapple = null;
-                    GrappleDisconnected.Invoke(temp);
-                }
-            }
-            return success;
         }
 
 
@@ -88,6 +52,44 @@ namespace Player
             if (Mathf.Abs(velocity.x) > maxHorizontalVel)
                 velocity.x *= 1 - horizontalDrag;
             _rb.linearVelocity = velocity;
+        }
+
+        public bool Grapple(Grappable point)
+        {
+            if (!CanGrapple(point))
+                return false;
+            var success = point.Grab(this);
+            if (success)
+            {
+                _currentGrapple = point;
+                GrappleConnected.Invoke(_currentGrapple);
+            }
+
+            return success;
+        }
+
+        public bool CanGrapple(Grappable point)
+        {
+            if (!IsGrappled && GrapplePossible)
+                return point.CanGrab(this);
+            return false;
+        }
+
+        public bool BreakGrapple()
+        {
+            var success = false;
+            if (_currentGrapple != null)
+            {
+                success = _currentGrapple.Release();
+                if (success)
+                {
+                    var temp = _currentGrapple;
+                    _currentGrapple = null;
+                    GrappleDisconnected.Invoke(temp);
+                }
+            }
+
+            return success;
         }
 
         private void ApplyDrag()

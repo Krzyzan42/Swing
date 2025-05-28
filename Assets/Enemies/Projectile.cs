@@ -8,6 +8,8 @@ namespace Enemies
         [SerializeField] private float damage;
         [SerializeField] private float speed;
 
+        public float Speed => speed;
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Monster")) return;

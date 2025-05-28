@@ -267,8 +267,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2663671369201553556, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
+      propertyPath: usePredictiveAiming
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2663671369201553556, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
       propertyPath: playerLayerMask.m_Bits
       value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 2663671369201553556, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
+      propertyPath: sightBlockerLayerMask.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5036290249618242004, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
       propertyPath: m_LocalPosition.x
