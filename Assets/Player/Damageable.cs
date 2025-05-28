@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,8 +15,13 @@ namespace Player
         public UnityEvent<float> onDamageTakenUnityEvent;
         public UnityEvent onDeathUnityEvent;
 
+        private CancellationTokenSource _tempInvulnerabilityCts;
+
         public Action<float> OnDamageTaken;
         public Action OnDeath;
+
+        public bool IsInvulnerable { get; set; }
+        public Func<float, bool> CanTakeDamagePredicate { get; set; }
 
         private void Start()
         {
@@ -32,6 +38,9 @@ namespace Player
         {
             OnDamageTaken -= HandleDamageTaken;
             OnDeath -= PlayHitSound;
+
+            _tempInvulnerabilityCts?.Cancel();
+            _tempInvulnerabilityCts?.Dispose();
         }
 
         private void HandleDamageTaken(float damage)
@@ -54,12 +63,20 @@ namespace Player
 
             if (damage == 0 || currentHealth <= 0) return;
 
+            if (IsInvulnerable) return;
+
+            if (CanTakeDamagePredicate != null && !CanTakeDamagePredicate(damage)) return;
+
             OnDamageTaken?.Invoke(damage);
             onDamageTakenUnityEvent?.Invoke(damage);
 
+            var previousHealth = currentHealth;
             currentHealth -= damage;
+            currentHealth = Mathf.Max(currentHealth, 0);
 
             if (!(currentHealth <= 0)) return;
+
+            if (!(previousHealth > 0)) return;
 
             OnDeath?.Invoke();
             onDeathUnityEvent?.Invoke();
@@ -74,12 +91,7 @@ namespace Player
             }
 
             maxHealth = newMaxHealth ?? maxHealth;
-            currentHealth = initialHealth;
-
-            if (!(currentHealth > maxHealth)) return;
-
-            Debug.LogError("Initial health is greater than max health");
-            currentHealth = maxHealth;
+            currentHealth = Mathf.Clamp(initialHealth, 0, maxHealth);
         }
 
         public void Heal(int healAmount)

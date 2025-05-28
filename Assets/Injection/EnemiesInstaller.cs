@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Injection
 {
-    public class GameSceneInstaller : MonoInstaller
+    public class EnemiesInstaller : MonoInstaller
     {
         [SerializeField] private Character character;
         [SerializeField] private Projectile projectilePrefab;

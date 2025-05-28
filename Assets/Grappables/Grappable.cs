@@ -10,8 +10,8 @@ namespace Grappables
 
         protected virtual void Awake()
         {
-            GrappleManager _grappleManager = FindAnyObjectByType<GrappleManager>();
-            _grappleManager.AddGrappable(this);
+            var grappleManager = FindAnyObjectByType<GrappleManager>();
+            grappleManager.AddGrappable(this);
         }
 
         public abstract bool Grab(SwingBody body);

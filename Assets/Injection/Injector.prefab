@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7668142636728063931}
   - component: {fileID: 6892154584239396860}
   - component: {fileID: 4415492252199205651}
+  - component: {fileID: 770665329414583923}
   m_Layer: 0
   m_Name: Injector
   m_TagString: Untagged
@@ -46,10 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers:
-  - {fileID: 4415492252199205651}
+  _monoInstallers: []
   _installerPrefabs: []
-  _findSiblingMonoInstallers: 0
+  _findSiblingMonoInstallers: 1
   _autoRun: 1
   OnPreInstall:
     m_PersistentCalls:
@@ -79,3 +79,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 0}
+  projectilePrefab: {fileID: 7203972023483766795, guid: 8a9613c64d0d33547a6b4bbdd4ae0bf2, type: 3}
+--- !u!114 &770665329414583923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3727336859315572057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 428bdfcaf214afb4d8740b20301a6620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerDeathEventChannel: {fileID: 11400000, guid: a7447719ac0221b4c87107a2f61548fc, type: 2}
+  flagReachedEventChannel: {fileID: 11400000, guid: 58a2dd7a9c8b0b74881afe5f3d763372, type: 2}

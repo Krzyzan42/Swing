@@ -12,14 +12,15 @@ GameObject:
   - component: {fileID: 4737521274368785280}
   - component: {fileID: 6730231629508323401}
   - component: {fileID: 4737521274368785295}
+  - component: {fileID: 2543322087838199698}
   - component: {fileID: 4737521274368785294}
   - component: {fileID: 4737521274368785281}
   - component: {fileID: 4737521274368785282}
   - component: {fileID: 4737521274368785283}
   - component: {fileID: 6792902330289855130}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54,6 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabGravityScale: 0.5
   grappleIndicatorPrefab: {fileID: 5933277299816221327, guid: 60dc8387d9d42ef4e8e0a2ba731487c5, type: 3}
+  characterInput: {fileID: 2543322087838199698}
 --- !u!114 &6730231629508323401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +91,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9683ac1bf3fe34db3e87e1fc5c7f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2543322087838199698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4737521274368785284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c34e9e894604c4181e004fc904ec1f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 1
 --- !u!212 &4737521274368785294
 SpriteRenderer:
   m_ObjectHideFlags: 0
