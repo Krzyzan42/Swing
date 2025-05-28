@@ -56,8 +56,7 @@ namespace Player
         {
             if (!IsGrappled && GrapplePossible)
                 return point.CanGrab(this);
-            else
-                return false;
+            return false;
         }
 
         public bool BreakGrapple()

@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 4737521274368785280}
   - component: {fileID: 6730231629508323401}
   - component: {fileID: 4737521274368785295}
+  - component: {fileID: 2543322087838199698}
   - component: {fileID: 4737521274368785294}
   - component: {fileID: 4737521274368785281}
   - component: {fileID: 4737521274368785282}
   - component: {fileID: 4737521274368785283}
   - component: {fileID: 6792902330289855130}
-  - component: {fileID: 2543322087838199698}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -91,6 +91,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9683ac1bf3fe34db3e87e1fc5c7f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2543322087838199698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4737521274368785284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c34e9e894604c4181e004fc904ec1f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 1
 --- !u!212 &4737521274368785294
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -272,19 +285,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2543322087838199698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4737521274368785284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c34e9e894604c4181e004fc904ec1f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerIndex: 1
 --- !u!1 &5462189189406771150
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,15 +30,16 @@ namespace Player
             _rope = GetComponentInChildren<RopeAnimation>();
 
             if (!grappleIndicatorPrefab) return;
-            grappleIndicatorPrefab = Instantiate(grappleIndicatorPrefab, transform.position, Quaternion.identity);
+            grappleIndicatorPrefab = Instantiate(grappleIndicatorPrefab, transform.position,
+                grappleIndicatorPrefab.transform.rotation);
             _grappleIndicator = grappleIndicatorPrefab;
         }
 
         private void Update()
         {
-            // I wanted to include a new input system but it is broken xd
-            var target = _grappleManager.FindClosestGrapplePoint(transform.position);
-            if (characterInput.IsGrabDown)
+            // I wanted to include a new input system, but it is broken xd
+            var target = _grappleManager.FindClosestGrappablePoint(transform.position, _swingBody);
+            if (characterInput.IsGrabDown && target)
             {
                 if (_swingBody.Grapple(target)) _rope.Attach(transform, target.transform);
             }
@@ -53,7 +54,20 @@ namespace Player
                 _swingBody.BreakGrapple();
             }
 
-            if (_grappleIndicator && target) _grappleIndicator.transform.position = target.transform.position;
+            UpdateGrappleIndicator(target);
+        }
+
+        private void UpdateGrappleIndicator(Grappable target)
+        {
+            if (_grappleIndicator && target)
+            {
+                _grappleIndicator.SetActive(true);
+                _grappleIndicator.transform.position = target.transform.position;
+            }
+            else
+            {
+                _grappleIndicator?.SetActive(false);
+            }
         }
 
         public void HandleDeath()
