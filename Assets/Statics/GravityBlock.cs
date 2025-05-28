@@ -14,6 +14,7 @@ namespace Statics
 
             if (!body) return;
 
+            _formerGravityScale = body.GravityScale;
             body.GrapplePossible = false;
             body.BreakGrapple();
             body.GravityScale = 0;
@@ -26,7 +27,7 @@ namespace Statics
             if (!body) return;
 
             body.GrapplePossible = true;
-            body.GravityScale = 1;
+            body.GravityScale = _formerGravityScale;
         }
     }
 }
