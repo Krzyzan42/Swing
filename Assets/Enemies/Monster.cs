@@ -10,6 +10,11 @@ namespace Enemies
         [SerializeField] private float sightRange;
         [SerializeField] private float aimingTime;
 
+        [SerializeField] private LayerMask playerLayerMask;
+        [SerializeField] private LayerMask sightBlockerLayerMask;
+
+        [SerializeField] private bool usePredictiveAiming;
+
         private EnemyStateMachine _machine;
 
         [Inject] private Projectile _projectilePrefab;
@@ -45,17 +50,15 @@ namespace Enemies
 
             if (!player) return false;
 
-            var distance = Vector3.Distance(player.transform.position, transform.position);
+            var distance = Vector2.Distance(player.transform.position, transform.position);
 
             if (distance > sightRange) return false;
 
             var directionToPlayer = (player.transform.position - transform.position).normalized;
 
-            var hit = Physics2D.Raycast(transform.position, directionToPlayer);
+            var hit = Physics2D.Raycast(transform.position, directionToPlayer, sightRange, sightBlockerLayerMask);
 
-            if (!hit || !hit.transform.CompareTag("Player")) return false;
-
-            return true;
+            return hit && hit.transform.CompareTag("Player");
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Player
         private readonly SimpleTimer _protectActivityTimer = new(1);
         private readonly SimpleTimer _protectCooldownTimer = new(.1f);
 
+        private Damageable _damageable;
+
         [CanBeNull] private GameObject _grappleIndicator;
 
         private GrappleManager _grappleManager;
@@ -40,6 +42,7 @@ namespace Player
             _grappleManager = FindAnyObjectByType<GrappleManager>();
             _swingBody = GetComponent<SwingBody>();
             _rope = GetComponentInChildren<RopeAnimation>();
+            _damageable = GetComponent<Damageable>();
 
             if (grappleIndicatorPrefab)
                 _grappleIndicator = Instantiate(grappleIndicatorPrefab, transform.position,
@@ -85,8 +88,10 @@ namespace Player
                 {
                     if (characterInput.IsSecondaryActionDown && _protectCooldownTimer.IsFinished(true))
                     {
+                        _damageable.IsInvulnerable = true;
                         await _protectActivityTimer.WaitAsync();
                         _protectCooldownTimer.Reset();
+                        _damageable.IsInvulnerable = false;
                     }
 
                     await UniTask.Yield();
