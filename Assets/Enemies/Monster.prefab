@@ -47,6 +47,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sightRange: 100
   aimingTime: 1
+  sightBlockerLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  usePredictiveAiming: 1
 --- !u!212 &4168954687920539717
 SpriteRenderer:
   m_ObjectHideFlags: 0

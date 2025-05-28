@@ -267,16 +267,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2663671369201553556, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
-      propertyPath: usePredictiveAiming
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2663671369201553556, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
       propertyPath: playerLayerMask.m_Bits
       value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 2663671369201553556, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
-      propertyPath: sightBlockerLayerMask.m_Bits
-      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5036290249618242004, guid: 4d2822a4ffcc1af4f9cdbf66dd8f89fb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7227,25 +7219,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 321360431}
   m_Mesh: {fileID: 1146108930}
---- !u!1 &325940972 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3727336859315572057, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
+--- !u!114 &325940976 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 770665329414583923, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
   m_PrefabInstance: {fileID: 1182439550}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &325940976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 325940972}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 428bdfcaf214afb4d8740b20301a6620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDeathEventChannel: {fileID: 11400000, guid: a7447719ac0221b4c87107a2f61548fc, type: 2}
-  flagReachedEventChannel: {fileID: 11400000, guid: 58a2dd7a9c8b0b74881afe5f3d763372, type: 2}
 --- !u!4 &340526850 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7069805649438415687, guid: b7da01869607ef945884dab4555044e6, type: 3}
@@ -7659,21 +7643,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 702475179}
     - target: {fileID: 4415492252199205651, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 7203972023483766795, guid: 8a9613c64d0d33547a6b4bbdd4ae0bf2, type: 3}
-    - target: {fileID: 4415492252199205651, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
       propertyPath: playerDeathEventChannel
       value: 
       objectReference: {fileID: 11400000, guid: a7447719ac0221b4c87107a2f61548fc, type: 2}
-    - target: {fileID: 6892154584239396860, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
-      propertyPath: _findSiblingMonoInstallers
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6892154584239396860, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
-      propertyPath: _monoInstallers.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6892154584239396860, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
       propertyPath: '_monoInstallers.Array.data[1]'
       value: 
@@ -7721,10 +7693,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3727336859315572057, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 325940976}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 209c5168889e5a949b71c3c69b7f65c7, type: 3}
 --- !u!1001 &1189945609
 PrefabInstance:

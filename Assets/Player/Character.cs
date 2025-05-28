@@ -98,7 +98,7 @@ namespace Player
                     await UniTask.Yield();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }

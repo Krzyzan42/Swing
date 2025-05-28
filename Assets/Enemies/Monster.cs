@@ -10,7 +10,6 @@ namespace Enemies
         [SerializeField] private float sightRange;
         [SerializeField] private float aimingTime;
 
-        [SerializeField] private LayerMask playerLayerMask;
         [SerializeField] private LayerMask sightBlockerLayerMask;
 
         [SerializeField] private bool usePredictiveAiming;
@@ -60,7 +59,7 @@ namespace Enemies
             projectile.GetComponent<Projectile>().ShootAt(directionToShoot);
         }
 
-        public static Vector3? CalculateInterceptPoint(Vector3 shooterPosition, float projectileSpeed,
+        private static Vector3? CalculateInterceptPoint(Vector3 shooterPosition, float projectileSpeed,
             Vector3 targetPosition, Vector3 targetVelocity)
         {
             var displacement = targetPosition - shooterPosition;
@@ -86,7 +85,7 @@ namespace Enemies
             var t1 = (-b + Mathf.Sqrt(discriminant)) / (2f * a);
             var t2 = (-b - Mathf.Sqrt(discriminant)) / (2f * a);
 
-            float timeToIntercept = 0;
+            float timeToIntercept;
 
             if (t1 > 0 && t2 > 0)
                 timeToIntercept = Mathf.Min(t1, t2);
