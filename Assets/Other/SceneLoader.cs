@@ -17,5 +17,10 @@ namespace Other
         {
             SceneManager.LoadScene("MainMenu");
         }
+
+        public static void ReloadScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
