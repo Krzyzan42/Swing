@@ -3,7 +3,7 @@ using Gameplay.Misc;
 using TMPro;
 using UnityEngine;
 
-namespace MainGameUI
+namespace UI.MainGame
 {
     public class PauseMenuManager : MonoBehaviour
     {

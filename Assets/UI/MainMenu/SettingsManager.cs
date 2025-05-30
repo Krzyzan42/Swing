@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MainMenu
+namespace UI.MainMenu
 {
     public class SettingsManager : MonoBehaviour
     {
