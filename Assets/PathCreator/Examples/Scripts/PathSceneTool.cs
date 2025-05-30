@@ -1,4 +1,5 @@
-﻿using PathCreation;
+﻿using System;
+using PathCreator.Core.Runtime.Objects;
 using UnityEngine;
 
 namespace PathCreator.Examples.Scripts
@@ -6,25 +7,22 @@ namespace PathCreator.Examples.Scripts
     [ExecuteInEditMode]
     public abstract class PathSceneTool : MonoBehaviour
     {
-        public event System.Action onDestroyed;
-        public PathCreation.PathCreator pathCreator;
+        public Core.Runtime.Objects.PathCreator pathCreator;
         public bool autoUpdate = true;
 
-        protected VertexPath path {
-            get {
-                return pathCreator.path;
-            }
+        protected VertexPath path => pathCreator.path;
+
+
+        protected virtual void OnDestroy()
+        {
+            if (onDestroyed != null) onDestroyed();
         }
 
-        public void TriggerUpdate() {
+        public event Action onDestroyed;
+
+        public void TriggerUpdate()
+        {
             PathUpdated();
-        }
-
-
-        protected virtual void OnDestroy() {
-            if (onDestroyed != null) {
-                onDestroyed();
-            }
         }
 
         protected abstract void PathUpdated();
