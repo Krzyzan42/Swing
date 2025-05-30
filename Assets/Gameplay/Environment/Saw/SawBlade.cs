@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Other.Saw
+namespace Gameplay.Environment.Saw
 {
     public class SawBlade : MonoBehaviour
     {

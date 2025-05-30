@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Other.Rope
+namespace Gameplay.Player
 {
 	public class RopeAnimation : MonoBehaviour
 	{

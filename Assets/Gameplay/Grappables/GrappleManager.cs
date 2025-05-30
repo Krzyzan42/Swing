@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay.Player;
 using JetBrains.Annotations;
-using Player;
 using UnityEngine;
 
-namespace Grappables
+namespace Gameplay.Grappables
 {
     public class GrappleManager : MonoBehaviour, IEnumerable
     {

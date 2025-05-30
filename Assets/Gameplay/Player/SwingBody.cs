@@ -1,8 +1,8 @@
-using Grappables;
+using Gameplay.Grappables;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Player
+namespace Gameplay.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class SwingBody : MonoBehaviour

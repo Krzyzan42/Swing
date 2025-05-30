@@ -1,14 +1,25 @@
-﻿using UnityEngine;
-using UnityEditor;
-using PathCreation;
+﻿using UnityEditor;
+using UnityEngine;
 
-namespace PathCreation.Examples
+namespace PathCreator.Examples.Scripts.Editor
 {
     [CustomEditor(typeof(PathSceneTool), true)]
-    public class PathSceneToolEditor : Editor
+    public class PathSceneToolEditor : UnityEditor.Editor
     {
+        private bool isSubscribed;
         protected PathSceneTool pathTool;
-        bool isSubscribed;
+
+        protected virtual void OnEnable()
+        {
+            pathTool = (PathSceneTool)target;
+            pathTool.onDestroyed += OnToolDestroyed;
+
+            if (TryFindPathCreator())
+            {
+                Subscribe();
+                TriggerUpdate();
+            }
+        }
 
         public override void OnInspectorGUI()
         {
@@ -24,60 +35,36 @@ namespace PathCreation.Examples
                         Subscribe();
                     }
 
-                    if (pathTool.autoUpdate)
-                    {
-                        TriggerUpdate();
-
-                    }
+                    if (pathTool.autoUpdate) TriggerUpdate();
                 }
             }
 
             if (GUILayout.Button("Manual Update"))
-            {
                 if (TryFindPathCreator())
                 {
                     TriggerUpdate();
                     SceneView.RepaintAll();
                 }
-            }
-
         }
 
 
-        void TriggerUpdate() {
-            if (pathTool.pathCreator != null) {
-                pathTool.TriggerUpdate();
-            }
+        private void TriggerUpdate()
+        {
+            if (pathTool.pathCreator != null) pathTool.TriggerUpdate();
         }
 
 
         protected virtual void OnPathModified()
         {
-            if (pathTool.autoUpdate)
-            {
-                TriggerUpdate();
-            }
+            if (pathTool.autoUpdate) TriggerUpdate();
         }
 
-        protected virtual void OnEnable()
+        private void OnToolDestroyed()
         {
-            pathTool = (PathSceneTool)target;
-            pathTool.onDestroyed += OnToolDestroyed;
-
-            if (TryFindPathCreator())
-            {
-                Subscribe();
-                TriggerUpdate();
-            }
+            if (pathTool != null) pathTool.pathCreator.pathUpdated -= OnPathModified;
         }
 
-        void OnToolDestroyed() {
-            if (pathTool != null) {
-                pathTool.pathCreator.pathUpdated -= OnPathModified;
-            }
-        }
 
- 
         protected virtual void Subscribe()
         {
             if (pathTool.pathCreator != null)
@@ -88,20 +75,17 @@ namespace PathCreation.Examples
             }
         }
 
-        bool TryFindPathCreator()
+        private bool TryFindPathCreator()
         {
             // Try find a path creator in the scene, if one is not already assigned
             if (pathTool.pathCreator == null)
             {
-                if (pathTool.GetComponent<PathCreator>() != null)
-                {
-                    pathTool.pathCreator = pathTool.GetComponent<PathCreator>();
-                }
-                else if (FindObjectOfType<PathCreator>())
-                {
-                    pathTool.pathCreator = FindObjectOfType<PathCreator>();
-                }
+                if (pathTool.GetComponent<Core.Runtime.Objects.PathCreator>() != null)
+                    pathTool.pathCreator = pathTool.GetComponent<Core.Runtime.Objects.PathCreator>();
+                else if (FindObjectOfType<Core.Runtime.Objects.PathCreator>())
+                    pathTool.pathCreator = FindObjectOfType<Core.Runtime.Objects.PathCreator>();
             }
+
             return pathTool.pathCreator != null;
         }
     }

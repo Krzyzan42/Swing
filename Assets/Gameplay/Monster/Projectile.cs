@@ -1,7 +1,7 @@
-using Player;
+using Gameplay.Player;
 using UnityEngine;
 
-namespace Enemies
+namespace Gameplay.Monster
 {
     public class Projectile : MonoBehaviour
     {

@@ -1,3 +1,9 @@
-﻿namespace PathCreation {
-	public enum EndOfPathInstruction {Loop, Reverse, Stop};
+﻿namespace PathCreator.Core.Runtime.Objects
+{
+    public enum EndOfPathInstruction
+    {
+        Loop,
+        Reverse,
+        Stop
+    }
 }
