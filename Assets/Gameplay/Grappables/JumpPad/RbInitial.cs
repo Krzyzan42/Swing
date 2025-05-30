@@ -1,8 +1,8 @@
-using Other.Reset;
+using Gameplay.Misc.Reset;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Grappables.JumpPad
+namespace Gameplay.Grappables.JumpPad
 {
     [RequireComponent(typeof(Reset))]
     [RequireComponent(typeof(Rigidbody2D))]

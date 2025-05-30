@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
-using Other.Reset;
-using Player;
+using Gameplay.Misc.Reset;
+using Gameplay.Player;
 using UnityEngine;
 
-namespace Grappables.SwingPoint
+namespace Gameplay.Grappables.SwingPoint
 {
     public class MovingBlock : Grappable, IResettable
     {

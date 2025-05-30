@@ -1,7 +1,7 @@
 ﻿using PathCreation;
 using UnityEngine;
 
-namespace PathCreation.Examples {
+namespace PathCreator.Examples.Scripts {
 
     [ExecuteInEditMode]
     public class PathPlacer : PathSceneTool {

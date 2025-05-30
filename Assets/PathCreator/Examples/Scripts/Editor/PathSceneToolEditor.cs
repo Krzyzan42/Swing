@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using PathCreation;
+using PathCreator.Examples.Scripts;
 
 namespace PathCreation.Examples
 {

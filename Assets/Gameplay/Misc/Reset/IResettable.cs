@@ -1,4 +1,4 @@
-namespace Other.Reset
+namespace Gameplay.Misc.Reset
 {
     public interface IResettable
     {

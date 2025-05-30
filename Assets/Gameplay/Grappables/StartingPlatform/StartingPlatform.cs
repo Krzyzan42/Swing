@@ -1,7 +1,7 @@
-using Other.Reset;
+using Gameplay.Misc.Reset;
 using UnityEngine;
 
-namespace Grappables.StartingPlatform
+namespace Gameplay.Grappables.StartingPlatform
 {
     [RequireComponent(typeof(Reset))]
     public class StartingPlatform : MonoBehaviour, IResettable

@@ -1,5 +1,5 @@
 using System;
-using Player;
+using Gameplay.Player;
 
 namespace Events.FlagReached
 {

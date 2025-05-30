@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Enemies.StateMachine
+namespace Gameplay.Monster.StateMachine
 {
     public class AimingAtPlayerState : EnemyState
     {

@@ -1,6 +1,6 @@
 using UnityEngine.SceneManagement;
 
-namespace Other
+namespace Gameplay.Misc
 {
     internal enum Scene
     {

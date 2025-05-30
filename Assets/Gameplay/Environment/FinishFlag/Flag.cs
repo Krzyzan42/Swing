@@ -1,10 +1,9 @@
 using Events.FlagReached;
-using Other.Reset;
-using Player;
+using Gameplay.Player;
 using UnityEngine;
 using Zenject;
 
-namespace Other.FinishFlag
+namespace Gameplay.Environment.FinishFlag
 {
     public class Flag : MonoBehaviour
     {

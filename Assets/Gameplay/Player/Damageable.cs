@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Player
+namespace Gameplay.Player
 {
     public class Damageable : MonoBehaviour
     {

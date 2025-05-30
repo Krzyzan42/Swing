@@ -1,7 +1,7 @@
-using Player;
+using Gameplay.Player;
 using UnityEngine;
 
-namespace Grappables
+namespace Gameplay.Grappables
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public abstract class Grappable : MonoBehaviour

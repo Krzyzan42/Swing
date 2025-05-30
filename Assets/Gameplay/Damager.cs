@@ -1,7 +1,7 @@
-using Player;
+using Gameplay.Player;
 using UnityEngine;
 
-namespace Statics
+namespace Gameplay
 {
     [RequireComponent(typeof(Collider2D))]
     public class Damager : MonoBehaviour

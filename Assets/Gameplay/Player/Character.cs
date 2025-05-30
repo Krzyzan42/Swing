@@ -2,14 +2,13 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Events.PlayerDeath;
-using Grappables;
+using Gameplay.Grappables;
 using JetBrains.Annotations;
 using LM;
-using Other.Rope;
 using UnityEngine;
 using Zenject;
 
-namespace Player
+namespace Gameplay.Player
 {
     public class Character : MonoBehaviour
     {
