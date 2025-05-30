@@ -18,11 +18,6 @@ namespace UI.MainMenu
             credits.SetActive(false);
         }
 
-        public void SelectLevel(int levelIndex)
-        {
-            SceneLoader.LoadLevel(levelIndex);
-        }
-
         public void ExitGame()
         {
             Application.Quit();
