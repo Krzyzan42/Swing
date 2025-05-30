@@ -6,11 +6,8 @@ using Zenject;
 
 namespace Other.FinishFlag
 {
-    [RequireComponent(typeof(Reset.Reset))]
-    public class Flag : MonoBehaviour, IResettable
+    public class Flag : MonoBehaviour
     {
-        private BoxCollider2D _boxCollider;
-
         [Inject] private FlagReachedEventChannel _flagReachedEventChannel;
         private SpriteRenderer _renderer;
 
@@ -27,11 +24,6 @@ namespace Other.FinishFlag
 
             _flagReachedEventChannel.RaiseEvent(new FlagReachedData(character));
             _renderer.color = Color.green;
-        }
-
-        public void Reset()
-        {
-            _renderer.color = Color.white;
         }
     }
 }

@@ -6,7 +6,6 @@ namespace Statics
     [RequireComponent(typeof(Collider2D))]
     public class Damager : MonoBehaviour
     {
-        [SerializeField] private float damage = 100;
         [SerializeField] private LayerMask damageableLayers = ~0;
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -14,7 +13,7 @@ namespace Statics
             if (((1 << other.gameObject.layer) & damageableLayers) == 0) return;
 
             var damageable = other.GetComponent<Damageable>();
-            if (damageable) damageable.TakeDamage(damage);
+            if (damageable) damageable.TakeDamage();
         }
     }
 }

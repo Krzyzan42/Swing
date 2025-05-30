@@ -13,9 +13,6 @@ namespace Player
 {
     public class Character : MonoBehaviour
     {
-        // will this be used?
-        [Range(0, 1)] public float grabGravityScale;
-
         [SerializeField] [CanBeNull] private GameObject grappleIndicatorPrefab;
 
         [SerializeField] private CharacterInput characterInput;
@@ -35,7 +32,6 @@ namespace Player
 
         private RopeAnimation _rope;
         private SwingBody _swingBody;
-        public Vector2 Position2D => new(transform.position.x, transform.position.y);
         public Vector2 Velocity => _swingBody.Velocity;
 
         private void Start()
@@ -55,7 +51,6 @@ namespace Player
 
         private void Update()
         {
-            // I wanted to include a new input system, but it is broken xd
             var target = _grappleManager.FindClosestGrappablePoint(transform.position, _swingBody);
             if (characterInput.IsGrabDown && target)
             {
@@ -98,10 +93,7 @@ namespace Player
                     await UniTask.Yield();
                 }
             }
-            catch (Exception)
-            {
-                // ignored
-            }
+            catch (Exception) { }
         }
 
         private void UpdateGrappleIndicator([CanBeNull] Grappable target)
@@ -119,6 +111,7 @@ namespace Player
 
         public void HandleDeath()
         {
+            print(_playerDeathEventChannel);
             _playerDeathEventChannel.RaiseEvent(new DeathData(this));
             Destroy(gameObject);
         }

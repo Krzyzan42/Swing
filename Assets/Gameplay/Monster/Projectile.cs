@@ -5,7 +5,6 @@ namespace Enemies
 {
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private float damage;
         [SerializeField] private float speed;
 
         public float Speed => speed;
@@ -14,7 +13,7 @@ namespace Enemies
         {
             if (other.CompareTag("Monster")) return;
 
-            if (other.CompareTag("Player")) other.GetComponent<Damageable>().TakeDamage(damage);
+            if (other.CompareTag("Player")) other.GetComponent<Damageable>().TakeDamage();
 
             Destroy(gameObject);
         }
