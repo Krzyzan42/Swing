@@ -1,6 +1,6 @@
 ﻿using EasyStateMachine;
 
-namespace Enemies.StateMachine
+namespace Gameplay.Monster.StateMachine
 {
     public class EnemyStateMachine : StateMachine<EnemyStateMachine, EnemyState>
     {

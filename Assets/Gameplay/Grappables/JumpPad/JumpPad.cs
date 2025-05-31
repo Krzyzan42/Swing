@@ -1,10 +1,10 @@
 using System.Collections;
-using Other.Reset;
-using Player;
+using Gameplay.Misc.Reset;
+using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Grappables.JumpPad
+namespace Gameplay.Grappables.JumpPad
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class JumpPad : Grappable, IResettable

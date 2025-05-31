@@ -1,5 +1,5 @@
-using Enemies;
-using Player;
+using Gameplay.Monster;
+using Gameplay.Player;
 using UnityEngine;
 using Zenject;
 

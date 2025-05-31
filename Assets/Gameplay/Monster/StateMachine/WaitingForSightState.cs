@@ -1,4 +1,4 @@
-﻿namespace Enemies.StateMachine
+﻿namespace Gameplay.Monster.StateMachine
 {
     public class WaitingForSightState : EnemyState
     {

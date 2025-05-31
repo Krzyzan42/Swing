@@ -1,9 +1,9 @@
-using Enemies.StateMachine;
-using Player;
+using Gameplay.Monster.StateMachine;
+using Gameplay.Player;
 using UnityEngine;
 using Zenject;
 
-namespace Enemies
+namespace Gameplay.Monster
 {
     public class Monster : MonoBehaviour
     {

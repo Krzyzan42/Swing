@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Other.Reset
+namespace Gameplay.Misc.Reset
 {
     public class Reset : MonoBehaviour
     {

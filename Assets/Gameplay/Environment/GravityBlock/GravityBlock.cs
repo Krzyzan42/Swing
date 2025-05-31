@@ -1,7 +1,7 @@
-using Player;
+using Gameplay.Player;
 using UnityEngine;
 
-namespace Statics
+namespace Gameplay.Environment.GravityBlock
 {
     [RequireComponent(typeof(Collider2D))]
     public class GravityBlock : MonoBehaviour
