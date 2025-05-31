@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
+  m_Name: Wave6
+  m_EditorClassIdentifier: 
+  m_AnimatedSprites:
+  - {fileID: -164561163, guid: 30e56918a7d66164181c641e9b044564, type: 3}
+  - {fileID: 1672822931, guid: 30e56918a7d66164181c641e9b044564, type: 3}
+  - {fileID: 789112953, guid: 30e56918a7d66164181c641e9b044564, type: 3}
+  - {fileID: 1648931331, guid: 30e56918a7d66164181c641e9b044564, type: 3}
+  - {fileID: 1867841648, guid: 30e56918a7d66164181c641e9b044564, type: 3}
+  - {fileID: 513759088, guid: 30e56918a7d66164181c641e9b044564, type: 3}
+  - {fileID: -333318513, guid: 30e56918a7d66164181c641e9b044564, type: 3}
+  m_MinSpeed: 8
+  m_MaxSpeed: 8
+  m_AnimationStartTime: 0
+  m_AnimationStartFrame: 0
+  m_TileColliderType: 0
+  m_TileAnimationFlags: 0
