@@ -6,6 +6,7 @@ using Gameplay.Grappables;
 using JetBrains.Annotations;
 using LM;
 using UnityEngine;
+using UnityEngine.Events;
 using Zenject;
 
 namespace Gameplay.Player
@@ -34,6 +35,8 @@ namespace Gameplay.Player
         private SwingBody _swingBody;
         public Vector2 Velocity => _swingBody.Velocity;
 
+        public UnityEvent grappled = new UnityEvent(); // For disabling starting platform
+
         private void Start()
         {
             _grappleManager = FindAnyObjectByType<GrappleManager>();
@@ -54,7 +57,11 @@ namespace Gameplay.Player
             var target = _grappleManager.FindClosestGrappablePoint(transform.position, _swingBody);
             if (characterInput.IsGrabDown && target)
             {
-                if (_swingBody.Grapple(target)) _rope.Attach(transform, target.transform);
+                if (_swingBody.Grapple(target))
+                {
+                    _rope.Attach(transform, target.transform);
+                    grappled.Invoke();
+                }
             }
             else if (characterInput.IsGrabUp)
             {
