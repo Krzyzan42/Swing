@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Events.PlayerDeath;
@@ -18,9 +19,6 @@ namespace Gameplay.Player
         [SerializeField] private CharacterInput characterInput;
         [SerializeField][CanBeNull] private GameObject deathEffect;
 
-        private readonly SimpleTimer _protectActivityTimer = new(1);
-        private readonly SimpleTimer _protectCooldownTimer = new(.1f);
-
         private Damageable _damageable;
 
         [CanBeNull] private GameObject _grappleIndicator;
@@ -29,13 +27,14 @@ namespace Gameplay.Player
 
         [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
 
-        private CancellationTokenSource _protectActionCts;
-
         private RopeAnimation _rope;
         private SwingBody _swingBody;
         public Vector2 Velocity => _swingBody.Velocity;
+        public float shieldCooldown = 1.5f;
+        public float shieldDuration = 0.2f;
 
         public UnityEvent grappled = new UnityEvent(); // For disabling starting platform
+        public Animator shieldAnimator;
 
         private void Start()
         {
@@ -47,9 +46,6 @@ namespace Gameplay.Player
             if (grappleIndicatorPrefab)
                 _grappleIndicator = Instantiate(grappleIndicatorPrefab, transform.position,
                     grappleIndicatorPrefab.transform.rotation);
-
-            _protectActionCts = new CancellationTokenSource();
-            HandleProtectAction(_protectActionCts.Token).Forget();
         }
 
         private void Update()
@@ -74,13 +70,9 @@ namespace Gameplay.Player
                 _swingBody.BreakGrapple();
             }
 
-            UpdateGrappleIndicator(target);
-        }
+            if (characterInput.IsSecondaryActionDown) StartCoroutine(Shield());
 
-        private void OnDestroy()
-        {
-            _protectActionCts?.Cancel();
-            _protectActionCts?.Dispose();
+            UpdateGrappleIndicator(target);
         }
 
         private void PlayDeathEffect()
@@ -90,24 +82,19 @@ namespace Gameplay.Player
             Instantiate(deathEffect, transform.position, Quaternion.identity);
         }
 
-        private async UniTaskVoid HandleProtectAction(CancellationToken cancellationToken)
-        {
-            try
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    if (characterInput.IsSecondaryActionDown && _protectCooldownTimer.IsFinished(true))
-                    {
-                        _damageable.IsInvulnerable = true;
-                        await _protectActivityTimer.WaitAsync();
-                        _protectCooldownTimer.Reset();
-                        _damageable.IsInvulnerable = false;
-                    }
 
-                    await UniTask.Yield();
-                }
+        private float lastShieldTime = 0;
+        private IEnumerator Shield()
+        {
+            if (Mathf.Abs(Time.time - lastShieldTime) > shieldCooldown)
+            {
+                lastShieldTime = Time.time;
+                _damageable.IsInvulnerable = true;
+                print("triggering");
+                shieldAnimator.SetTrigger("Play");
+                yield return new WaitForSeconds(shieldDuration);
+                _damageable.IsInvulnerable = false;
             }
-            catch (Exception) { }
         }
 
         private void UpdateGrappleIndicator([CanBeNull] Grappable target)
