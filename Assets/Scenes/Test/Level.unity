@@ -192,6 +192,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4539882822340255125, guid: 12bfdfda8020af74fbe5c2d9032baf9c, type: 3}
+      propertyPath: fallDrag
+      value: 0.0832
+      objectReference: {fileID: 0}
     - target: {fileID: 7829610462743407670, guid: 12bfdfda8020af74fbe5c2d9032baf9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6
@@ -232,7 +236,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1021128474198439719, guid: 12bfdfda8020af74fbe5c2d9032baf9c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

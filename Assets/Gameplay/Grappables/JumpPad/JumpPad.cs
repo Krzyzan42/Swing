@@ -1,5 +1,4 @@
 using System.Collections;
-using Gameplay.Misc.Reset;
 using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -7,7 +6,7 @@ using UnityEngine.Serialization;
 namespace Gameplay.Grappables.JumpPad
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class JumpPad : Grappable, IResettable
+    public class JumpPad : Grappable
     {
         public Transform target;
 
@@ -38,18 +37,6 @@ namespace Gameplay.Grappables.JumpPad
         {
             base.Awake();
             _rb = GetComponent<Rigidbody2D>();
-        }
-
-        public void Reset()
-        {
-            StopAllCoroutines();
-            _canBeGrabbed = true;
-            _canBeReleased = true;
-            if (_current)
-            {
-                _current.BreakGrapple();
-                _current = null;
-            }
         }
 
         public bool IsTargetReached(Vector2 position)

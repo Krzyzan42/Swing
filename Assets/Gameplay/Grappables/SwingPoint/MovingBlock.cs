@@ -1,12 +1,11 @@
 using System.Collections;
-using Gameplay.Misc.Reset;
 using Gameplay.Player;
 using PathCreator.Core.Runtime.Objects;
 using UnityEngine;
 
 namespace Gameplay.Grappables.SwingPoint
 {
-    public class MovingBlock : Grappable, IResettable
+    public class MovingBlock : Grappable
     {
         public float correctionRange = 0.2f;
         public float correctionStrength = 3f;
@@ -53,13 +52,6 @@ namespace Gameplay.Grappables.SwingPoint
                 _attachedBody.GravityScale = SwingUpGravityScale;
             else
                 _attachedBody.GravityScale = 1;
-        }
-
-        public void Reset()
-        {
-            if (_currentRoutine != null)
-                StopCoroutine(_currentRoutine);
-            _used = false;
         }
 
         public override bool Grab(SwingBody body)

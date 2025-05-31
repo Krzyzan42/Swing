@@ -1,10 +1,8 @@
-using Gameplay.Misc.Reset;
 using UnityEngine;
 
 namespace Gameplay.Grappables.StartingPlatform
 {
-    [RequireComponent(typeof(Reset))]
-    public class StartingPlatform : MonoBehaviour, IResettable
+    public class StartingPlatform : MonoBehaviour
     {
         private BoxCollider2D _boxCollider2D;
         private SpriteRenderer _spriteRenderer;
@@ -22,12 +20,6 @@ namespace Gameplay.Grappables.StartingPlatform
 
             _boxCollider2D.enabled = false;
             _spriteRenderer.enabled = false;
-        }
-
-        public void Reset()
-        {
-            _boxCollider2D.enabled = true;
-            _spriteRenderer.enabled = true;
         }
     }
 }

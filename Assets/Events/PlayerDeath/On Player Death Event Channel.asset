@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 633bc633ee3f21e48a1177635440d750, type: 3}
-  m_Name: On Player Death Event Channel SO
+  m_Name: On Player Death Event Channel
   m_EditorClassIdentifier: 
   onEventRaisedUnityEvent:
     m_PersistentCalls:
