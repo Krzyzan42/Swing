@@ -55,6 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grappleIndicatorPrefab: {fileID: 5933277299816221327, guid: 60dc8387d9d42ef4e8e0a2ba731487c5, type: 3}
   characterInput: {fileID: 6818536369052873031}
+  deathEffect: {fileID: 7557579874459552221, guid: c22e6a5eeadc30a4dbef8605faad886b, type: 3}
 --- !u!114 &4539882822340255125
 MonoBehaviour:
   m_ObjectHideFlags: 0

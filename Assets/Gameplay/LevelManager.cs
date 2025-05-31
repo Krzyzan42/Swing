@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Events.FlagReached;
 using Events.PlayerDeath;
 using Gameplay.Misc;
@@ -65,16 +66,22 @@ namespace Gameplay
 
         private void HandlePlayerDeath(DeathData deathData)
         {
+            StartCoroutine(HandlePlayerDeathDelayed(deathData));
+        }
+
+        private IEnumerator HandlePlayerDeathDelayed(DeathData deathData)
+        {
+            yield return new WaitForSeconds(0.5f);
             if (multiplayerMode == MultiplayerMode.MultiplayerCompetitive)
             {
                 if (_atLeastOnePlayerHasDied)
                 {
                     SceneLoader.ReloadScene();
-                    return;
+                    yield break;
                 }
 
                 _atLeastOnePlayerHasDied = true;
-                return;
+                yield break;
             }
 
             SceneLoader.ReloadScene();

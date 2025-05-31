@@ -15,6 +15,7 @@ namespace Gameplay.Player
         [SerializeField] [CanBeNull] private GameObject grappleIndicatorPrefab;
 
         [SerializeField] private CharacterInput characterInput;
+        [SerializeField][CanBeNull] private GameObject deathEffect;
 
         private readonly SimpleTimer _protectActivityTimer = new(1);
         private readonly SimpleTimer _protectCooldownTimer = new(.1f);
@@ -75,6 +76,13 @@ namespace Gameplay.Player
             _protectActionCts?.Dispose();
         }
 
+        private void PlayDeathEffect()
+        {
+            if (deathEffect == null) return;
+
+            Instantiate(deathEffect, transform.position, Quaternion.identity);
+        }
+
         private async UniTaskVoid HandleProtectAction(CancellationToken cancellationToken)
         {
             try
@@ -112,6 +120,7 @@ namespace Gameplay.Player
         {
             print(_playerDeathEventChannel);
             _playerDeathEventChannel.RaiseEvent(new DeathData(this));
+            PlayDeathEffect();
             Destroy(gameObject);
         }
     }
