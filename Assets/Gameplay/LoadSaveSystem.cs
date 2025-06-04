@@ -19,6 +19,24 @@ namespace Gameplay
             return wrapper?.levels ?? GenerateDefaultLevels();
         }
 
+        public static void SetLevelAsCompleted(int levelIndex, int bestTimeMilliseconds)
+        {
+            var levels = GetLevels();
+            var level = levels.Find(l => l.levelIndex == levelIndex);
+            if (level == null)
+                return;
+
+            level.unlocked = true;
+            if (!level.BestTimeMilliseconds.HasValue || bestTimeMilliseconds < level.BestTimeMilliseconds.Value)
+                level.BestTimeMilliseconds = bestTimeMilliseconds;
+
+            var nextLevel = levels.Find(l => l.levelIndex == levelIndex + 1);
+            if (nextLevel != null)
+                nextLevel.unlocked = true;
+
+            SaveLevels(levels);
+        }
+
         private static void SaveLevels(List<LevelInfo> levels)
         {
             var wrapper = new LevelInfoListWrapper { levels = levels };

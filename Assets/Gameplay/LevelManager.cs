@@ -50,8 +50,11 @@ namespace Gameplay
             _flagReachedEventChannel.UnregisterListener(HandleFlagReached);
         }
 
-        public void LevelFinished()
+        private void LevelFinished()
         {
+            var milliseconds = (int)(Time.time * 1000f);
+            LoadSaveSystem.SetLevelAsCompleted(levelNumber, milliseconds);
+
             switch (finishAction)
             {
                 case FinishAction.ShowVictory:
