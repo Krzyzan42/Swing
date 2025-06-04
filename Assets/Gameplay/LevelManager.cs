@@ -3,6 +3,7 @@ using System.Collections;
 using Events.FlagReached;
 using Events.PlayerDeath;
 using Gameplay.Misc;
+using UI.MainGame;
 using UnityEngine;
 using Zenject;
 
@@ -12,7 +13,7 @@ namespace Gameplay
     {
         public enum FinishAction
         {
-            LoadNextLevel,
+            ShowVictory,
             LoadCutscene,
             RestartLevel
         }
@@ -28,6 +29,8 @@ namespace Gameplay
 
         [SerializeField] private FinishAction finishAction;
         [SerializeField] private MultiplayerMode multiplayerMode;
+
+        public GameUIManager uiManager;
 
 
         private bool _atLeastOnePlayerHasDied;
@@ -51,8 +54,8 @@ namespace Gameplay
         {
             switch (finishAction)
             {
-                case FinishAction.LoadNextLevel:
-                    SceneLoader.LoadLevel(levelNumber + 1);
+                case FinishAction.ShowVictory:
+                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(levelNumber + 1));
                     break;
                 case FinishAction.RestartLevel:
                     SceneLoader.ReloadScene();

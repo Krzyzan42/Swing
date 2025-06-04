@@ -9,7 +9,6 @@ namespace Injection
     {
         [SerializeField] private PlayerDeathEventChannel playerDeathEventChannel;
         [SerializeField] private FlagReachedEventChannel flagReachedEventChannel;
-        [SerializeField] private LevelCompleteEventChannel flagReachedEventChannel;
 
         public override void InstallBindings()
         {
