@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Gameplay
 {
     public static class LoadSaveSystem
     {
+        // C:/Users/janta/AppData/LocalLow/DefaultCompany/Swing\levels.json
         private static readonly string SavePath = Path.Combine(Application.persistentDataPath, "levels.json");
 
         public static List<LevelInfo> GetLevels()
@@ -19,10 +21,10 @@ namespace Gameplay
             return wrapper?.levels ?? GenerateDefaultLevels();
         }
 
-        public static void SetLevelAsCompleted(int levelIndex, int bestTimeMilliseconds)
+        public static void SetLevelAsCompleted(string levelId, [CanBeNull] string nextLevelId, int bestTimeMilliseconds)
         {
             var levels = GetLevels();
-            var level = levels.Find(l => l.levelIndex == levelIndex);
+            var level = levels.Find(l => l.levelId == levelId);
             if (level == null)
                 return;
 
@@ -30,7 +32,7 @@ namespace Gameplay
             if (!level.BestTimeMilliseconds.HasValue || bestTimeMilliseconds < level.BestTimeMilliseconds.Value)
                 level.BestTimeMilliseconds = bestTimeMilliseconds;
 
-            var nextLevel = levels.Find(l => l.levelIndex == levelIndex + 1);
+            var nextLevel = levels.Find(l => l.levelId == nextLevelId);
             if (nextLevel != null)
                 nextLevel.unlocked = true;
 
@@ -50,7 +52,7 @@ namespace Gameplay
             for (var i = 1; i <= 10; i++)
                 levels.Add(new LevelInfo
                 {
-                    levelIndex = i,
+                    levelId = i.ToString(),
                     unlocked = i == 1,
                     BestTimeMilliseconds = null
                 });
@@ -61,7 +63,7 @@ namespace Gameplay
         [Serializable]
         public class LevelInfo
         {
-            public int levelIndex;
+            public string levelId;
             public bool unlocked;
             public int? BestTimeMilliseconds;
         }

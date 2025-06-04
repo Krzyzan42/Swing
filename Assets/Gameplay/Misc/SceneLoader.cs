@@ -8,9 +8,9 @@ namespace Gameplay.Misc
 
     public static class SceneLoader
     {
-        public static void LoadLevel(int level)
+        public static void LoadLevel(string level)
         {
-            SceneManager.LoadScene($"Scenes/Levels/{level.ToString()}");
+            SceneManager.LoadScene($"Scenes/Levels/{level}");
         }
 
         public static void LoadMainMenu()

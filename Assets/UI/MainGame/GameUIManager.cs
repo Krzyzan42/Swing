@@ -16,9 +16,16 @@ namespace UI.MainGame
         private float _lastDisplayedTime = -1f;
         private Action _onNextLevelClicked;
 
+        private float _startTime;
+
+        private void Start()
+        {
+            _startTime = Time.time;
+        }
+
         private void Update()
         {
-            var currentTime = Time.time;
+            var currentTime = Time.time - _startTime;
             if (!(Mathf.Abs(currentTime - _lastDisplayedTime) >= 0.01f)) return;
 
             timeText.SetText($"Time {currentTime.ToString("0.00", CultureInfo.InvariantCulture)}");
@@ -60,7 +67,7 @@ namespace UI.MainGame
             Time.timeScale = 0f;
             victoryMenu.SetActive(true);
 
-            var currentTime = Time.time;
+            var currentTime = Time.time - _startTime;
 
             victoryText.SetText(victoryText.text.Replace("{time}",
                 currentTime.ToString("0.00", CultureInfo.InvariantCulture)));

@@ -3,6 +3,7 @@ using System.Collections;
 using Events.FlagReached;
 using Events.PlayerDeath;
 using Gameplay.Misc;
+using JetBrains.Annotations;
 using UI.MainGame;
 using UnityEngine;
 using Zenject;
@@ -25,18 +26,25 @@ namespace Gameplay
             MultiplayerCompetitive
         }
 
-        [SerializeField] private int levelNumber;
+        [SerializeField] private string levelId;
+        [SerializeField] [CanBeNull] private string nextLevelId;
 
         [SerializeField] private FinishAction finishAction;
         [SerializeField] private MultiplayerMode multiplayerMode;
 
         public GameUIManager uiManager;
 
-
         private bool _atLeastOnePlayerHasDied;
         [Inject] private FlagReachedEventChannel _flagReachedEventChannel;
 
         [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
+
+        private float _startTime;
+
+        private void Start()
+        {
+            _startTime = Time.time;
+        }
 
         private void OnEnable()
         {
@@ -52,13 +60,13 @@ namespace Gameplay
 
         private void LevelFinished()
         {
-            var milliseconds = (int)(Time.time * 1000f);
-            LoadSaveSystem.SetLevelAsCompleted(levelNumber, milliseconds);
+            var milliseconds = (int)((Time.time - _startTime) * 1000f);
+            LoadSaveSystem.SetLevelAsCompleted(levelId, nextLevelId, milliseconds);
 
             switch (finishAction)
             {
                 case FinishAction.ShowVictory:
-                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(levelNumber + 1));
+                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextLevelId));
                     break;
                 case FinishAction.RestartLevel:
                     SceneLoader.ReloadScene();

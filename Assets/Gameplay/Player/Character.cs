@@ -84,7 +84,7 @@ namespace Gameplay.Player
 
         private void PlayDeathEffect()
         {
-            if (deathEffect == null) return;
+            if (!deathEffect) return;
 
             Instantiate(deathEffect, transform.position, Quaternion.identity);
         }
@@ -117,7 +117,6 @@ namespace Gameplay.Player
 
         public void HandleDeath()
         {
-            print(_playerDeathEventChannel);
             _playerDeathEventChannel.RaiseEvent(new DeathData(this));
             PlayDeathEffect();
             Destroy(gameObject);
