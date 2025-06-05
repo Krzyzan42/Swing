@@ -21,16 +21,22 @@ namespace Gameplay
             return wrapper?.levels ?? GenerateDefaultLevels();
         }
 
-        public static void SetLevelAsCompleted(string levelId, [CanBeNull] string nextLevelId, int bestTimeMilliseconds)
+        public static void SetLevelAsCompleted(string levelId, [CanBeNull] string nextLevelId, int bestTimeMilliseconds,
+            out bool isNewRecord)
         {
+            isNewRecord = false;
+
             var levels = GetLevels();
             var level = levels.Find(l => l.levelId == levelId);
             if (level == null)
                 return;
 
             level.unlocked = true;
-            if (!level.BestTimeMilliseconds.HasValue || bestTimeMilliseconds < level.BestTimeMilliseconds.Value)
-                level.BestTimeMilliseconds = bestTimeMilliseconds;
+            if (level.bestTimeMilliseconds < 0 || bestTimeMilliseconds < level.bestTimeMilliseconds)
+            {
+                level.bestTimeMilliseconds = bestTimeMilliseconds;
+                isNewRecord = true;
+            }
 
             var nextLevel = levels.Find(l => l.levelId == nextLevelId);
             if (nextLevel != null)
@@ -54,7 +60,7 @@ namespace Gameplay
                 {
                     levelId = i.ToString(),
                     unlocked = i == 1,
-                    BestTimeMilliseconds = null
+                    bestTimeMilliseconds = -1
                 });
             SaveLevels(levels);
             return levels;
@@ -65,7 +71,7 @@ namespace Gameplay
         {
             public string levelId;
             public bool unlocked;
-            public int? BestTimeMilliseconds;
+            public int bestTimeMilliseconds;
         }
 
         [Serializable]

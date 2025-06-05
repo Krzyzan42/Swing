@@ -61,12 +61,12 @@ namespace Gameplay
         private void LevelFinished()
         {
             var milliseconds = (int)((Time.time - _startTime) * 1000f);
-            LoadSaveSystem.SetLevelAsCompleted(levelId, nextLevelId, milliseconds);
+            LoadSaveSystem.SetLevelAsCompleted(levelId, nextLevelId, milliseconds, out var isNewRecord);
 
             switch (finishAction)
             {
                 case FinishAction.ShowVictory:
-                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextLevelId));
+                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextLevelId), isNewRecord);
                     break;
                 case FinishAction.RestartLevel:
                     SceneLoader.ReloadScene();

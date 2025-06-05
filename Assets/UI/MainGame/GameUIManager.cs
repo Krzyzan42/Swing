@@ -13,6 +13,8 @@ namespace UI.MainGame
         [SerializeField] private GameObject gameUI;
         [SerializeField] private GameObject victoryMenu;
         [SerializeField] private TextMeshProUGUI victoryText;
+        [SerializeField] private GameObject newRecord;
+
         private float _lastDisplayedTime = -1f;
         private Action _onNextLevelClicked;
 
@@ -61,13 +63,15 @@ namespace UI.MainGame
             pauseMenu.SetActive(false);
         }
 
-        public void EnableVictoryMenu(Action onNextLevelClicked)
+        public void EnableVictoryMenu(Action onNextLevelClicked, bool showNewRecord)
         {
             DisableGameUI();
             Time.timeScale = 0f;
             victoryMenu.SetActive(true);
 
             var currentTime = Time.time - _startTime;
+
+            newRecord.SetActive(showNewRecord);
 
             victoryText.SetText(victoryText.text.Replace("{time}",
                 currentTime.ToString("0.00", CultureInfo.InvariantCulture)));
