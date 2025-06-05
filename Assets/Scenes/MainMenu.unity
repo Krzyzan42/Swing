@@ -2855,6 +2855,8 @@ GameObject:
   - component: {fileID: 1528675155}
   - component: {fileID: 1528675157}
   - component: {fileID: 1528675158}
+  - component: {fileID: 1528675160}
+  - component: {fileID: 1528675159}
   m_Layer: 0
   m_Name: MainMenuManager
   m_TagString: Untagged
@@ -2887,7 +2889,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 988441457160008148}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1528675157
@@ -2907,6 +2910,7 @@ MonoBehaviour:
   effectsText: {fileID: 2004609739}
   musicSlider: {fileID: 1892256093}
   effectsSlider: {fileID: 1286278563}
+  soundManager: {fileID: 1528675160}
 --- !u!114 &1528675158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2923,6 +2927,62 @@ MonoBehaviour:
   levelButtonUnlockedPrefab: {fileID: 1090661016041631448, guid: 3576c2301d3df194d99c515138015944, type: 3}
   levelButtonLockedPrefab: {fileID: 1090661016041631448, guid: bc7ea0730df07de45a2d61e590a66193, type: 3}
   levelsHolder: {fileID: 1882090264}
+--- !u!114 &1528675159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528675154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5446cc11c9ad094387f8938725cfad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1528675160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528675154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ec21ffb5b1b1148a1848914f21b7fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - identifier: music1
+    clip: {fileID: 8300000, guid: 33398b4d1131f3145aa89ac62c378276, type: 3}
+    volume: 1
+    pitch: 1
+    isLoop: 0
+    allowOverlap: 0
+    type: 1
+    dedicatedSource: {fileID: 0}
+    originalVolume: 0
+  - identifier: music2
+    clip: {fileID: 8300000, guid: 7005ad6f7d0f9a74dbe1bd013aa68d4a, type: 3}
+    volume: 1
+    pitch: 1
+    isLoop: 0
+    allowOverlap: 0
+    type: 1
+    dedicatedSource: {fileID: 0}
+    originalVolume: 0
+  - identifier: music3
+    clip: {fileID: 8300000, guid: 054f90cedc6d30e4cb56652d523d9888, type: 3}
+    volume: 1
+    pitch: 1
+    isLoop: 0
+    allowOverlap: 0
+    type: 1
+    dedicatedSource: {fileID: 0}
+    originalVolume: 0
+  audioSourceParent: {fileID: 988441457160008148}
+  unityInstantiator: {fileID: 1528675159}
+  maxPoolSize: 50
+  disallowDestroyOnLoad: 0
 --- !u!1 &1561142036
 GameObject:
   m_ObjectHideFlags: 0
@@ -10488,6 +10548,21 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c11c92d2da8bb6e41b83211b7e005701, type: 3}
+--- !u!4 &988441457160008148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5906914376955597619}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.5546278, y: 1.9517853, z: 0.07970089}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1528675156}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3102670341427421985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10727,6 +10802,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05acc30e716535d41ab773c42d8dbbe8, type: 3}
+--- !u!1 &5906914376955597619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 988441457160008148}
+  m_Layer: 0
+  m_Name: AudioSources
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!224 &8453340058721483805 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6132985580636058788, guid: c11c92d2da8bb6e41b83211b7e005701, type: 3}

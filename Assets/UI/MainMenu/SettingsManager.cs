@@ -1,4 +1,5 @@
 using System.Globalization;
+using LM;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,13 @@ namespace UI.MainMenu
 
         [SerializeField] private Slider musicSlider;
         [SerializeField] private Slider effectsSlider;
+
+        [SerializeField] private SoundManager soundManager;
+
+        private void Start()
+        {
+            soundManager.Play("music2");
+        }
 
         public void HandleMusicVolumeChanged()
         {
