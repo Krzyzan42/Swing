@@ -4,6 +4,7 @@ using Events.FlagReached;
 using Events.PlayerDeath;
 using Gameplay.Misc;
 using JetBrains.Annotations;
+using LM;
 using UI.MainGame;
 using UnityEngine;
 using Zenject;
@@ -38,6 +39,7 @@ namespace Gameplay
         [Inject] private FlagReachedEventChannel _flagReachedEventChannel;
 
         [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
+        [Inject] private SoundManager _soundManager;
 
         private float _startTime;
 
@@ -60,6 +62,8 @@ namespace Gameplay
 
         private void LevelFinished()
         {
+            _soundManager.Play("win");
+
             var milliseconds = (int)((Time.time - _startTime) * 1000f);
             LoadSaveSystem.SetLevelAsCompleted(levelId, nextLevelId, milliseconds, out var isNewRecord);
 
@@ -85,6 +89,7 @@ namespace Gameplay
 
         private IEnumerator HandlePlayerDeathDelayed(DeathData deathData)
         {
+            _soundManager.Play("hit");
             yield return new WaitForSeconds(0.5f);
             if (multiplayerMode == MultiplayerMode.MultiplayerCompetitive)
             {

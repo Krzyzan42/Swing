@@ -1,5 +1,6 @@
 using Gameplay.Monster.StateMachine;
 using Gameplay.Player;
+using LM;
 using UnityEngine;
 using Zenject;
 
@@ -19,6 +20,8 @@ namespace Gameplay.Monster
         private EnemyStateMachine _machine;
 
         [Inject] private Projectile _projectilePrefab;
+
+        [Inject] private SoundManager _soundManager;
 
         [Inject]
         public Character Player { get; private set; }
@@ -61,6 +64,8 @@ namespace Gameplay.Monster
                         PredictiveAimMaxRadiansDeviation, 0f);
                 }
             }
+
+            _soundManager.Play("shoot");
 
             var projectile = Instantiate(_projectilePrefab.gameObject, monsterPosition, Quaternion.identity);
             projectile.GetComponent<Projectile>().ShootAt(directionToShoot);
