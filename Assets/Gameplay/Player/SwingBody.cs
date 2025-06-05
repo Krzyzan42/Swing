@@ -1,6 +1,8 @@
+using Events.PlayerDeath;
 using Gameplay.Grappables;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace Gameplay.Player
 {
@@ -19,16 +21,21 @@ namespace Gameplay.Player
 
         public UnityEvent<Grappable> GrappleConnected = new();
         public UnityEvent<Grappable> GrappleDisconnected = new();
+
+        [field: SerializeField] public float FallDragScale { get; set; } = 1f;
+
         private Grappable _currentGrapple;
         private GrappleManager _grappleManager;
+
+        [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
 
         private Rigidbody2D _rb;
 
         public bool EnableGravity { get; set; } = true;
         public float GravityScale { get; set; } = 1f;
         public bool EnableFallDrag { get; set; } = true;
-        public float FallDragScale { get; set; } = 1f;
         public bool GrapplePossible { get; set; } = true;
+        public bool InsideGravityBlock { get; set; } = false;
         public bool IsGrappled => _currentGrapple != null;
         public Vector2 Velocity => _rb.linearVelocity;
         public Vector2 Position2D => new(transform.position.x, transform.position.y);
@@ -77,19 +84,17 @@ namespace Gameplay.Player
 
         public bool BreakGrapple()
         {
-            var success = false;
-            if (_currentGrapple != null)
-            {
-                success = _currentGrapple.Release();
-                if (success)
-                {
-                    var temp = _currentGrapple;
-                    _currentGrapple = null;
-                    GrappleDisconnected.Invoke(temp);
-                }
-            }
+            if (_currentGrapple == null) return false;
 
-            return success;
+            var success = _currentGrapple.Release();
+
+            if (!success) return false;
+
+            var temp = _currentGrapple;
+            _currentGrapple = null;
+            GrappleDisconnected.Invoke(temp);
+
+            return true;
         }
 
         private void ApplyDrag()
@@ -98,7 +103,7 @@ namespace Gameplay.Player
             var speedDiff = Mathf.Abs(velocity.y - maxFallSpeed);
 
             var slowdown = speedDiff * fallDrag * FallDragScale;
-            velocity.y -= slowdown;
+            velocity.y *= 1 - slowdown;
             _rb.linearVelocity = velocity;
         }
 

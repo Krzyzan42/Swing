@@ -16,9 +16,9 @@ namespace Gameplay.Environment.GravityBlock
 
             _formerGravityScale = body.GravityScale;
             body.GrapplePossible = false;
+            body.InsideGravityBlock = true;
             body.BreakGrapple();
             body.GravityScale = 0;
-            print("hehexd");
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -28,8 +28,8 @@ namespace Gameplay.Environment.GravityBlock
             if (!body) return;
 
             body.GrapplePossible = true;
+            body.InsideGravityBlock = false;
             body.GravityScale = _formerGravityScale;
-            print("ahhh");
         }
     }
 }

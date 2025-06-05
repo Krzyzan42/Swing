@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Gameplay
 {
     public static class LoadSaveSystem
     {
+        // C:/Users/janta/AppData/LocalLow/DefaultCompany/Swing\levels.json
         private static readonly string SavePath = Path.Combine(Application.persistentDataPath, "levels.json");
 
         public static List<LevelInfo> GetLevels()
@@ -17,6 +19,30 @@ namespace Gameplay
             var json = File.ReadAllText(SavePath);
             var wrapper = JsonUtility.FromJson<LevelInfoListWrapper>(json);
             return wrapper?.levels ?? GenerateDefaultLevels();
+        }
+
+        public static void SetLevelAsCompleted(string levelId, [CanBeNull] string nextLevelId, int bestTimeMilliseconds,
+            out bool isNewRecord)
+        {
+            isNewRecord = false;
+
+            var levels = GetLevels();
+            var level = levels.Find(l => l.levelId == levelId);
+            if (level == null)
+                return;
+
+            level.unlocked = true;
+            if (level.bestTimeMilliseconds < 0 || bestTimeMilliseconds < level.bestTimeMilliseconds)
+            {
+                level.bestTimeMilliseconds = bestTimeMilliseconds;
+                isNewRecord = true;
+            }
+
+            var nextLevel = levels.Find(l => l.levelId == nextLevelId);
+            if (nextLevel != null)
+                nextLevel.unlocked = true;
+
+            SaveLevels(levels);
         }
 
         private static void SaveLevels(List<LevelInfo> levels)
@@ -32,9 +58,9 @@ namespace Gameplay
             for (var i = 1; i <= 10; i++)
                 levels.Add(new LevelInfo
                 {
-                    levelIndex = i,
+                    levelId = i.ToString(),
                     unlocked = i == 1,
-                    BestTimeMilliseconds = null
+                    bestTimeMilliseconds = -1
                 });
             SaveLevels(levels);
             return levels;
@@ -43,9 +69,9 @@ namespace Gameplay
         [Serializable]
         public class LevelInfo
         {
-            public int levelIndex;
+            public string levelId;
             public bool unlocked;
-            public int? BestTimeMilliseconds;
+            public int bestTimeMilliseconds;
         }
 
         [Serializable]

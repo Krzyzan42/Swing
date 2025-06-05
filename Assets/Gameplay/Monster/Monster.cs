@@ -7,6 +7,8 @@ namespace Gameplay.Monster
 {
     public class Monster : MonoBehaviour
     {
+        private const float PredictiveAimMaxRadiansDeviation = Mathf.Deg2Rad * 30f;
+
         [SerializeField] private float sightRange;
         [SerializeField] private float aimingTime;
 
@@ -52,7 +54,12 @@ namespace Gameplay.Monster
                 var interceptPoint =
                     CalculateInterceptPoint(monsterPosition, projectileSpeed, playerPosition, playerVelocity);
 
-                if (interceptPoint.HasValue) directionToShoot = (interceptPoint.Value - monsterPosition).normalized;
+                if (interceptPoint.HasValue)
+                {
+                    var predictiveDirection = (interceptPoint.Value - monsterPosition).normalized;
+                    directionToShoot = Vector3.RotateTowards(directionToShoot, predictiveDirection,
+                        PredictiveAimMaxRadiansDeviation, 0f);
+                }
             }
 
             var projectile = Instantiate(_projectilePrefab.gameObject, monsterPosition, Quaternion.identity);

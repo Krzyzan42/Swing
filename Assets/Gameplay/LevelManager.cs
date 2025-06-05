@@ -3,6 +3,8 @@ using System.Collections;
 using Events.FlagReached;
 using Events.PlayerDeath;
 using Gameplay.Misc;
+using JetBrains.Annotations;
+using UI.MainGame;
 using UnityEngine;
 using Zenject;
 
@@ -12,7 +14,7 @@ namespace Gameplay
     {
         public enum FinishAction
         {
-            LoadNextLevel,
+            ShowVictory,
             LoadCutscene,
             RestartLevel
         }
@@ -24,16 +26,25 @@ namespace Gameplay
             MultiplayerCompetitive
         }
 
-        [SerializeField] private int levelNumber;
+        [SerializeField] private string levelId;
+        [SerializeField] [CanBeNull] private string nextLevelId;
 
         [SerializeField] private FinishAction finishAction;
         [SerializeField] private MultiplayerMode multiplayerMode;
 
+        public GameUIManager uiManager;
 
         private bool _atLeastOnePlayerHasDied;
         [Inject] private FlagReachedEventChannel _flagReachedEventChannel;
 
         [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
+
+        private float _startTime;
+
+        private void Start()
+        {
+            _startTime = Time.time;
+        }
 
         private void OnEnable()
         {
@@ -47,12 +58,15 @@ namespace Gameplay
             _flagReachedEventChannel.UnregisterListener(HandleFlagReached);
         }
 
-        public void LevelFinished()
+        private void LevelFinished()
         {
+            var milliseconds = (int)((Time.time - _startTime) * 1000f);
+            LoadSaveSystem.SetLevelAsCompleted(levelId, nextLevelId, milliseconds, out var isNewRecord);
+
             switch (finishAction)
             {
-                case FinishAction.LoadNextLevel:
-                    SceneLoader.LoadLevel(levelNumber + 1);
+                case FinishAction.ShowVictory:
+                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextLevelId), isNewRecord);
                     break;
                 case FinishAction.RestartLevel:
                     SceneLoader.ReloadScene();

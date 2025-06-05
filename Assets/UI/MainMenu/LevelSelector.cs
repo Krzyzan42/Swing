@@ -21,17 +21,17 @@ namespace UI.MainMenu
             {
                 var levelGameObject = Instantiate(level.unlocked ? levelButtonUnlockedPrefab : levelButtonLockedPrefab,
                     levelsHolder);
-                levelGameObject.GetComponentInChildren<TextMeshProUGUI>().SetText(level.levelIndex.ToString());
-                var capturedIndex = level.levelIndex;
+                levelGameObject.GetComponentInChildren<TextMeshProUGUI>().SetText(level.levelId);
+                var capturedIndex = level.levelId;
                 var button = levelGameObject.GetComponent<Button>();
                 button.onClick.AddListener(() => SelectLevel(capturedIndex));
                 button.interactable = level.unlocked;
             }
         }
 
-        private static void SelectLevel(int levelIndex)
+        private static void SelectLevel(string levelId)
         {
-            SceneLoader.LoadLevel(levelIndex);
+            SceneLoader.LoadLevel(levelId);
         }
 
         public void ShowLevelSelector()

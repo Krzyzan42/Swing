@@ -1,11 +1,7 @@
-using System;
 using System.Collections;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using Events.PlayerDeath;
 using Gameplay.Grappables;
 using JetBrains.Annotations;
-using LM;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -14,10 +10,16 @@ namespace Gameplay.Player
 {
     public class Character : MonoBehaviour
     {
+        private static readonly int Play = Animator.StringToHash("Play");
         [SerializeField] [CanBeNull] private GameObject grappleIndicatorPrefab;
 
         [SerializeField] private CharacterInput characterInput;
-        [SerializeField][CanBeNull] private GameObject deathEffect;
+        [SerializeField] [CanBeNull] private GameObject deathEffect;
+        public float shieldCooldown = 1.5f;
+        public float shieldDuration = 0.2f;
+
+        public UnityEvent grappled = new(); // For disabling starting platform
+        public Animator shieldAnimator;
 
         private Damageable _damageable;
 
@@ -25,16 +27,13 @@ namespace Gameplay.Player
 
         private GrappleManager _grappleManager;
 
+        private float _lastShieldTime;
+
         [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
 
         private RopeAnimation _rope;
         private SwingBody _swingBody;
         public Vector2 Velocity => _swingBody.Velocity;
-        public float shieldCooldown = 1.5f;
-        public float shieldDuration = 0.2f;
-
-        public UnityEvent grappled = new UnityEvent(); // For disabling starting platform
-        public Animator shieldAnimator;
 
         private void Start()
         {
@@ -42,6 +41,8 @@ namespace Gameplay.Player
             _swingBody = GetComponent<SwingBody>();
             _rope = GetComponentInChildren<RopeAnimation>();
             _damageable = GetComponent<Damageable>();
+
+            shieldAnimator.gameObject.SetActive(false);
 
             if (grappleIndicatorPrefab)
                 _grappleIndicator = Instantiate(grappleIndicatorPrefab, transform.position,
@@ -75,26 +76,30 @@ namespace Gameplay.Player
             UpdateGrappleIndicator(target);
         }
 
+
+        public void OnCollisionEnter2D(Collision2D _)
+        {
+            if (_swingBody.InsideGravityBlock) HandleDeath();
+        }
+
         private void PlayDeathEffect()
         {
-            if (deathEffect == null) return;
+            if (!deathEffect) return;
 
             Instantiate(deathEffect, transform.position, Quaternion.identity);
         }
 
-
-        private float lastShieldTime = 0;
         private IEnumerator Shield()
         {
-            if (Mathf.Abs(Time.time - lastShieldTime) > shieldCooldown)
-            {
-                lastShieldTime = Time.time;
-                _damageable.IsInvulnerable = true;
-                print("triggering");
-                shieldAnimator.SetTrigger("Play");
-                yield return new WaitForSeconds(shieldDuration);
-                _damageable.IsInvulnerable = false;
-            }
+            if (!(Mathf.Abs(Time.time - _lastShieldTime) > shieldCooldown)) yield break;
+
+            _lastShieldTime = Time.time;
+            _damageable.IsInvulnerable = true;
+            shieldAnimator.gameObject.SetActive(true);
+            shieldAnimator.SetTrigger(Play);
+            yield return new WaitForSeconds(shieldDuration);
+            _damageable.IsInvulnerable = false;
+            shieldAnimator.gameObject.SetActive(false);
         }
 
         private void UpdateGrappleIndicator([CanBeNull] Grappable target)
@@ -112,7 +117,6 @@ namespace Gameplay.Player
 
         public void HandleDeath()
         {
-            print(_playerDeathEventChannel);
             _playerDeathEventChannel.RaiseEvent(new DeathData(this));
             PlayDeathEffect();
             Destroy(gameObject);
