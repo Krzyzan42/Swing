@@ -168,6 +168,33 @@ MonoBehaviour:
     type: 0
     dedicatedSource: {fileID: 0}
     originalVolume: 0
+  - identifier: music1
+    clip: {fileID: 8300000, guid: 33398b4d1131f3145aa89ac62c378276, type: 3}
+    volume: 1
+    pitch: 1
+    isLoop: 0
+    allowOverlap: 0
+    type: 1
+    dedicatedSource: {fileID: 0}
+    originalVolume: 0
+  - identifier: music2
+    clip: {fileID: 8300000, guid: 7005ad6f7d0f9a74dbe1bd013aa68d4a, type: 3}
+    volume: 1
+    pitch: 1
+    isLoop: 0
+    allowOverlap: 0
+    type: 1
+    dedicatedSource: {fileID: 0}
+    originalVolume: 0
+  - identifier: music3
+    clip: {fileID: 8300000, guid: 054f90cedc6d30e4cb56652d523d9888, type: 3}
+    volume: 1
+    pitch: 1
+    isLoop: 0
+    allowOverlap: 0
+    type: 0
+    dedicatedSource: {fileID: 0}
+    originalVolume: 0
   audioSourceParent: {fileID: 5968805098012738042}
   unityInstantiator: {fileID: 547754050509718978}
   maxPoolSize: 50

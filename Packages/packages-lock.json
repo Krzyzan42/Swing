@@ -21,7 +21,7 @@
       "dependencies": {
         "com.unity.addressables": "2.2.2"
       },
-      "hash": "6ba1449f1f869f59353d27d68444b48f91568dfc"
+      "hash": "ad1f0dd3ad2363b93b4d01e714dde59f6ab9345d"
     },
     "com.svermeulen.extenject": {
       "version": "https://github.com/Mathijs-Bakker/Extenject.git?path=UnityProject/Assets/Plugins/Zenject/Source",

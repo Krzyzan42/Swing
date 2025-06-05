@@ -46,6 +46,8 @@ namespace Gameplay
         private void Start()
         {
             _startTime = Time.time;
+
+            _soundManager.Play("music2");
         }
 
         private void OnEnable()
