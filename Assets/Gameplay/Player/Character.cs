@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Events.PlayerDeath;
 using Gameplay.Grappables;
@@ -13,7 +15,6 @@ namespace Gameplay.Player
     {
         private static readonly int Play = Animator.StringToHash("Play");
         [SerializeField] [CanBeNull] private GameObject grappleIndicatorPrefab;
-
         [SerializeField] private CharacterInput characterInput;
         [SerializeField] [CanBeNull] private GameObject deathEffect;
         public float shieldCooldown = 1.5f;
@@ -21,6 +22,7 @@ namespace Gameplay.Player
 
         public UnityEvent grappled = new(); // For disabling starting platform
         public Animator shieldAnimator;
+        private CancellationTokenSource _cts;
 
         private Damageable _damageable;
 
@@ -40,6 +42,8 @@ namespace Gameplay.Player
 
         private void Start()
         {
+            _cts = new CancellationTokenSource();
+
             _grappleManager = FindAnyObjectByType<GrappleManager>();
             _swingBody = GetComponent<SwingBody>();
             _rope = GetComponentInChildren<RopeAnimation>();
@@ -86,6 +90,11 @@ namespace Gameplay.Player
             UpdateGrappleIndicator(target);
         }
 
+        private void OnDestroy()
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+        }
 
         public void OnCollisionEnter2D(Collision2D _)
         {
@@ -106,10 +115,15 @@ namespace Gameplay.Player
             shieldAnimator.gameObject.SetActive(true);
             shieldAnimator.SetTrigger(Play);
 
-            await UniTask.Delay((int)(shieldDuration * 1000));
-
-            _damageable.IsInvulnerable = false;
-            shieldAnimator.gameObject.SetActive(false);
+            try
+            {
+                await UniTask.Delay((int)(shieldDuration * 1000), cancellationToken: _cts.Token);
+                _damageable.IsInvulnerable = false;
+                shieldAnimator.gameObject.SetActive(false);
+            }
+            catch (OperationCanceledException)
+            {
+            }
         }
 
         private void UpdateGrappleIndicator([CanBeNull] Grappable target)
