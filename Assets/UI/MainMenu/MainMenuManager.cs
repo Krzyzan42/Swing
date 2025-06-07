@@ -7,6 +7,12 @@ namespace UI.MainMenu
     public class MainMenuManager : MonoBehaviour
     {
         [SerializeField] private GameObject credits;
+        [SerializeField] private string raceLevelName;
+
+        public void LoadRaceLevel()
+        {
+            SceneLoader.LoadLevel(raceLevelName);
+        }
 
         public void ShowCredits()
         {
