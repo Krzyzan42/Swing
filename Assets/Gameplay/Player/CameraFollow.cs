@@ -37,6 +37,9 @@ namespace Gameplay.Player
                 }
                 case 2:
                 {
+                    if (!targets[0] || !targets[1])
+                        break;
+
                     var target1 = targets[0].position;
                     var target2 = targets[1].position;
                     var center = (target1 + target2) / 2f;
@@ -44,10 +47,16 @@ namespace Gameplay.Player
                     transform.position =
                         Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, smoothTime);
 
-                    var distance = Vector3.Distance(target1, target2);
+                    var distance = Mathf.Max(Vector3.Distance(target1, target2), 0.1f);
                     if (_cameraMain.orthographic)
-                        _cameraMain.orthographicSize = Mathf.Lerp(_cameraMain.orthographicSize, Mathf.Max(5, distance),
-                            Time.deltaTime * 2f);
+                    {
+                        const float minSize = 5f;
+                        const float maxSize = 20f;
+                        var targetSize = Mathf.Clamp(distance, minSize, maxSize);
+                        _cameraMain.orthographicSize =
+                            Mathf.Lerp(_cameraMain.orthographicSize, targetSize, Time.deltaTime * 2f);
+                    }
+
                     break;
                 }
             }
