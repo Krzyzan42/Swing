@@ -198,6 +198,7 @@ MonoBehaviour:
   audioSourceParent: {fileID: 5968805098012738042}
   unityInstantiator: {fileID: 547754050509718978}
   maxPoolSize: 50
+  disallowDestroyOnLoad: 0
 --- !u!1 &7178413330177388239
 GameObject:
   m_ObjectHideFlags: 0

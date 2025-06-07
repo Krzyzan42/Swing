@@ -28,6 +28,8 @@ namespace UI.MainMenu
             var volume = musicSlider.value;
             musicText.SetText($"Music Volume: {volume.ToString("0.00", CultureInfo.InvariantCulture)}");
             PlayerPrefs.SetFloat("MusicVolume", volume);
+
+            soundManager.SetMusicVolume(volume);
         }
 
         public void HandleSoundEffectsVolumeChanged()
@@ -35,6 +37,8 @@ namespace UI.MainMenu
             var volume = effectsSlider.value;
             effectsText.SetText($"Sound Effects Volume: {volume.ToString("0.00", CultureInfo.InvariantCulture)}");
             PlayerPrefs.SetFloat("EffectsVolume", volume);
+
+            soundManager.SetEffectsVolume(volume);
         }
 
         public void EnableSettingsMenu()
