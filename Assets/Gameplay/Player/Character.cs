@@ -1,7 +1,8 @@
-using System.Collections;
+using Cysharp.Threading.Tasks;
 using Events.PlayerDeath;
 using Gameplay.Grappables;
 using JetBrains.Annotations;
+using LM;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -32,6 +33,8 @@ namespace Gameplay.Player
         [Inject] private PlayerDeathEventChannel _playerDeathEventChannel;
 
         private RopeAnimation _rope;
+
+        [Inject] private SoundManager _soundManager;
         private SwingBody _swingBody;
         public Vector2 Velocity => _swingBody.Velocity;
 
@@ -43,6 +46,8 @@ namespace Gameplay.Player
             _damageable = GetComponent<Damageable>();
 
             shieldAnimator.gameObject.SetActive(false);
+
+            _lastShieldTime = -1000f;
 
             if (grappleIndicatorPrefab)
                 _grappleIndicator = Instantiate(grappleIndicatorPrefab, transform.position,
@@ -58,6 +63,7 @@ namespace Gameplay.Player
                 {
                     _rope.Attach(transform, target.transform);
                     grappled.Invoke();
+                    _soundManager.Play("grapple");
                 }
             }
             else if (characterInput.IsGrabUp)
@@ -71,7 +77,11 @@ namespace Gameplay.Player
                 _swingBody.BreakGrapple();
             }
 
-            if (characterInput.IsSecondaryActionDown) StartCoroutine(Shield());
+            if (characterInput.IsSecondaryActionDown && Mathf.Abs(Time.time - _lastShieldTime) > shieldCooldown)
+            {
+                _soundManager.Play("shield");
+                Shield().Forget();
+            }
 
             UpdateGrappleIndicator(target);
         }
@@ -89,15 +99,15 @@ namespace Gameplay.Player
             Instantiate(deathEffect, transform.position, Quaternion.identity);
         }
 
-        private IEnumerator Shield()
+        private async UniTaskVoid Shield()
         {
-            if (!(Mathf.Abs(Time.time - _lastShieldTime) > shieldCooldown)) yield break;
-
             _lastShieldTime = Time.time;
             _damageable.IsInvulnerable = true;
             shieldAnimator.gameObject.SetActive(true);
             shieldAnimator.SetTrigger(Play);
-            yield return new WaitForSeconds(shieldDuration);
+
+            await UniTask.Delay((int)(shieldDuration * 1000));
+
             _damageable.IsInvulnerable = false;
             shieldAnimator.gameObject.SetActive(false);
         }
