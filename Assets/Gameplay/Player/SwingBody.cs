@@ -22,7 +22,8 @@ namespace Gameplay.Player
         public UnityEvent<Grappable> GrappleConnected = new();
         public UnityEvent<Grappable> GrappleDisconnected = new();
 
-        [field: SerializeField] public float FallDragScale { get; set; } = 1f;
+        [field: SerializeField]
+        public float FallDragScale { get; set; } = 1f;
 
         private Grappable _currentGrapple;
         private GrappleManager _grappleManager;
@@ -36,7 +37,7 @@ namespace Gameplay.Player
         public bool EnableFallDrag { get; set; } = true;
         public bool GrapplePossible { get; set; } = true;
         public bool InsideGravityBlock { get; set; } = false;
-        public bool IsGrappled => _currentGrapple != null;
+        public bool IsGrappled => _currentGrapple;
         public Vector2 Velocity => _rb.linearVelocity;
         public Vector2 Position2D => new(transform.position.x, transform.position.y);
 
@@ -84,7 +85,7 @@ namespace Gameplay.Player
 
         public bool BreakGrapple()
         {
-            if (_currentGrapple == null) return false;
+            if (!_currentGrapple) return false;
 
             var success = _currentGrapple.Release();
 
