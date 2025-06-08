@@ -30,6 +30,9 @@ namespace Gameplay.Player
                 case 1:
                 {
                     var target = targets[0];
+
+                    if (!target) return;
+
                     var targetPosition = target.position + offset;
                     transform.position =
                         Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, smoothTime);

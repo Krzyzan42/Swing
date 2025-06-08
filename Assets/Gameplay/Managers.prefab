@@ -247,6 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoresToFetch: 50
+  bridge: {fileID: 3164579457903876850}
 --- !u!114 &3164579457903876850
 MonoBehaviour:
   m_ObjectHideFlags: 0
