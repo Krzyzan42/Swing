@@ -29,5 +29,20 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/2.unity
     guid: 1d6cd005068d3634d8faaf0f1ebd2b44
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/cutscene_2.unity
+    guid: 4d8f726a7ebc68f41967d4955cc4967b
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/cutscene_1.unity
+    guid: 3c08448474a31b54e8aa9c04d16ce55d
+  - enabled: 1
+    path: Assets/Scenes/Levels/3.unity
+    guid: 13a7df37a520ece47bacac053b37b75a
+  - enabled: 1
+    path: Assets/Scenes/Levels/4.unity
+    guid: 2fb8db1d8ff158049b661e6d05b215ac
+  - enabled: 1
+    path: Assets/Scenes/Levels/5.unity
+    guid: f753d9542f421bf40bd1d2dddc403f55
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
