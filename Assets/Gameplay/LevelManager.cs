@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using Events.FlagReached;
 using Events.PlayerDeath;
 using Gameplay.Misc;
@@ -68,11 +69,15 @@ namespace Gameplay
 
             var milliseconds = (int)((Time.time - _startTime) * 1000f);
             LoadSaveSystem.SetLevelAsCompleted(levelId, nextLevelId, milliseconds, out var isNewRecord);
+            var formattedTime = (Time.time - _startTime).ToString("0.00", CultureInfo.InvariantCulture);
+
+            var username = PlayerPrefs.GetString("username", "Jantar");
 
             switch (finishAction)
             {
                 case FinishAction.ShowVictory:
-                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextLevelId), isNewRecord);
+                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextLevelId), isNewRecord, formattedTime,
+                        username, milliseconds);
                     break;
                 case FinishAction.RestartLevel:
                     SceneLoader.ReloadScene();

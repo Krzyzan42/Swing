@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace EasyHighScore.Dino
 {
@@ -11,25 +12,20 @@ namespace EasyHighScore.Dino
 
         public int scoresToFetch = 50;
 
-        private CoroutineLeaderboardServerBridge _bridge;
+        [FormerlySerializedAs("_bridge")] [SerializeField]
+        private CoroutineLeaderboardServerBridge bridge;
 
         private int _configuredLeaderboardID;
         private string _configuredLeaderboardSecret;
         private string _configuredServerEndpoint;
 
-        private void Awake()
-        {
-            _bridge = GetComponent<CoroutineLeaderboardServerBridge>();
-            if (_bridge == null) _bridge = gameObject.AddComponent<CoroutineLeaderboardServerBridge>();
-        }
-
         public void UploadNewHighScore(string username, int score, Action onSuccess, Action<string> onError)
         {
-            if (_bridge == null || _bridge.leaderboardID == 0)
+            if (bridge == null || bridge.leaderboardID == 0)
             {
                 onError?.Invoke("DinoLeaderboardAdapter or its bridge is not properly initialized.");
                 Debug.LogError(
-                    $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] UploadNewHighScore called but bridge not ready. Bridge ID: {(_bridge != null ? _bridge.leaderboardID.ToString() : "null")}");
+                    $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] UploadNewHighScore called but bridge not ready. Bridge ID: {(bridge != null ? bridge.leaderboardID.ToString() : "null")}");
                 return;
             }
 
@@ -42,8 +38,8 @@ namespace EasyHighScore.Dino
             if (username.Length > MaxNameLength) username = username.Substring(0, MaxNameLength);
 
             Debug.Log(
-                $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] Attempting to upload score for {username}: {score} to bridge ID: {_bridge.leaderboardID}");
-            _bridge.SendUserValue(username, score,
+                $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] Attempting to upload score for {username}: {score} to bridge ID: {bridge.leaderboardID}");
+            bridge.SendUserValue(username, score,
                 () =>
                 {
                     Debug.Log(
@@ -62,11 +58,11 @@ namespace EasyHighScore.Dino
         public void DownloadHighScores(Action<HighScore[]> onSuccess,
             Action<string> onError)
         {
-            if (!_bridge || _bridge.leaderboardID == 0)
+            if (!bridge || bridge.leaderboardID == 0)
             {
                 onError?.Invoke("DinoLeaderboardAdapter or its bridge is not properly initialized.");
                 Debug.LogError(
-                    $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] DownloadHighScores called but bridge not ready. Bridge ID: {(_bridge != null ? _bridge.leaderboardID.ToString() : "null")}");
+                    $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] DownloadHighScores called but bridge not ready. Bridge ID: {(bridge != null ? bridge.leaderboardID.ToString() : "null")}");
                 onSuccess?.Invoke(Array.Empty<HighScore>());
                 return;
             }
@@ -74,8 +70,8 @@ namespace EasyHighScore.Dino
             const int startPosition = 1;
 
             Debug.Log(
-                $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] Attempting to download scores. Fetch: {scoresToFetch}. Bridge ID: {_bridge.leaderboardID}");
-            _bridge.RequestEntries(startPosition, scoresToFetch,
+                $"[DinoLeaderboardAdapter ID:{_configuredLeaderboardID}] Attempting to download scores. Fetch: {scoresToFetch}. Bridge ID: {bridge.leaderboardID}");
+            bridge.RequestEntries(startPosition, scoresToFetch,
                 dinoEntries =>
                 {
                     if (dinoEntries == null)
@@ -109,19 +105,19 @@ namespace EasyHighScore.Dino
             _configuredServerEndpoint = endpoint;
             scoresToFetch = fetchCount;
 
-            if (_bridge == null)
+            if (bridge == null)
             {
                 Debug.LogError(
                     "[DinoLeaderboardAdapter] Bridge was null during Initialize. Attempting to re-acquire/add.");
-                _bridge = GetComponent<CoroutineLeaderboardServerBridge>();
-                if (_bridge == null) _bridge = gameObject.AddComponent<CoroutineLeaderboardServerBridge>();
+                bridge = GetComponent<CoroutineLeaderboardServerBridge>();
+                if (bridge == null) bridge = gameObject.AddComponent<CoroutineLeaderboardServerBridge>();
             }
 
-            _bridge.leaderboardID = _configuredLeaderboardID;
-            _bridge.leaderboardSecret = _configuredLeaderboardSecret;
-            _bridge.serverEndpoint = _configuredServerEndpoint;
+            bridge.leaderboardID = _configuredLeaderboardID;
+            bridge.leaderboardSecret = _configuredLeaderboardSecret;
+            bridge.serverEndpoint = _configuredServerEndpoint;
 
-            Debug.Log($"[DinoLeaderboardAdapter] Initialized and Bridge configured for ID: {_bridge.leaderboardID}");
+            Debug.Log($"[DinoLeaderboardAdapter] Initialized and Bridge configured for ID: {bridge.leaderboardID}");
         }
     }
 }
