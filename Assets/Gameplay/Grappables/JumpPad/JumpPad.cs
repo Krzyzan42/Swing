@@ -111,32 +111,35 @@ namespace Gameplay.Grappables.JumpPad
 
         private IEnumerator JumpOffCoroutine(SwingBody swingBody)
         {
-            float t = 0;
             var rb = swingBody.GetComponent<Rigidbody2D>();
-            var savedVelocity = Vector2.zero;
-            _current = swingBody;
-
-            var velocityAtGrab = rb.linearVelocity;
-
+            Vector2 startPosition = swingBody.Position2D;
+            var initialVelocity = rb.linearVelocity; // Save for perpendicular launch
+    
+            // Take full control
+            rb.isKinematic = true;
             rb.linearVelocity = Vector2.zero;
 
-            while (t < 1 && !IsTargetReached(rb.position))
+            float duration = 0.5f; // Control how long the pull-in takes
+            for (float t = 0; t < duration; t += Time.deltaTime)
             {
-                var dir = (TargetPosition - swingBody.Position2D).normalized;
-
-                var vel = Vector2.Lerp(Vector2.zero, dir * maxApproachSpeed, jumpPadSpeedChange.Evaluate(t));
-
-                if (Vector2.Distance(TargetPosition, swingBody.Position2D) < velocitySaveDist &&
-                    savedVelocity == Vector2.zero)
-                {
-                    var perp = Vector2.Perpendicular(JumpDirection).normalized;
-                    savedVelocity = Vector2.Dot(perp, velocityAtGrab) * perp;
-                }
-
-                rb.linearVelocity = vel;
-                t += Time.fixedDeltaTime;
-                yield return new WaitForFixedUpdate();
+                // Move the player's position along a curve from their start to the target
+                Vector2 newPos = Vector2.Lerp(startPosition, TargetPosition, t / duration);
+                rb.MovePosition(newPos);
+        
+                if (IsTargetReached(rb.position))
+                    break; // Exit if we arrive early
+            
+                yield return null; // Use normal update for positional lerp
             }
+
+            // Ensure final position is exact
+            rb.position = TargetPosition;
+
+            // Give control back to physics and launch
+            rb.isKinematic = false;
+    
+            var perp = Vector2.Perpendicular(JumpDirection).normalized;
+            var savedVelocity = Vector2.Dot(perp, initialVelocity) * perp;
 
             _canBeReleased = true;
             swingBody.BreakGrapple();
