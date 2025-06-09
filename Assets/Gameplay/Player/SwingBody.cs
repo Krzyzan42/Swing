@@ -2,6 +2,7 @@ using Events.PlayerDeath;
 using Gameplay.Grappables;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Gameplay.Player
@@ -19,8 +20,11 @@ namespace Gameplay.Player
 
         [Range(0, 20)] [SerializeField] private float maxHorizontalVel = 5;
 
-        public UnityEvent<Grappable> GrappleConnected = new();
-        public UnityEvent<Grappable> GrappleDisconnected = new();
+        [FormerlySerializedAs("GrappleConnected")]
+        public UnityEvent<Grappable> grappleConnected = new();
+
+        [FormerlySerializedAs("GrappleDisconnected")]
+        public UnityEvent<Grappable> grappleDisconnected = new();
 
         [field: SerializeField]
         public float FallDragScale { get; set; } = 1f;
@@ -70,7 +74,7 @@ namespace Gameplay.Player
             if (success)
             {
                 _currentGrapple = point;
-                GrappleConnected.Invoke(_currentGrapple);
+                grappleConnected.Invoke(_currentGrapple);
             }
 
             return success;
@@ -93,7 +97,7 @@ namespace Gameplay.Player
 
             var temp = _currentGrapple;
             _currentGrapple = null;
-            GrappleDisconnected.Invoke(temp);
+            grappleDisconnected.Invoke(temp);
 
             return true;
         }
