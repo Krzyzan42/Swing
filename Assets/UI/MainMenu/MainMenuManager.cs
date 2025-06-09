@@ -1,5 +1,4 @@
 using Gameplay.Misc;
-using UnityEditor;
 using UnityEngine;
 
 namespace UI.MainMenu
@@ -27,7 +26,10 @@ namespace UI.MainMenu
         public void ExitGame()
         {
             Application.Quit();
+#if UNITY_ANDROID || UNITY_IOS
+#else
             EditorApplication.ExitPlaymode();
+#endif
         }
     }
 }
