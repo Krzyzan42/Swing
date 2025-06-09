@@ -1,27 +1,32 @@
 using Gameplay.Player;
 using UnityEngine;
+using Zenject;
 
-public class StartingPlatform : MonoBehaviour
+namespace Gameplay.Environment.StartingPlatform
 {
-    public new Collider2D collider;
-    public new Animator animation;
-
-    private bool hidden = false;
-
-	void Awake()
-	{
-        animation.enabled = false;
-        Character character = FindAnyObjectByType<Character>();
-        if (character)
-            character.grappled.AddListener(HidePlatform);
-	}
-
-	public void HidePlatform()
+    public class StartingPlatform : MonoBehaviour
     {
-        if (hidden) return;
+        public new Collider2D collider;
+        public new Animator animation;
 
-        animation.enabled = true;
-        collider.enabled = false;
-        hidden = true;
+        [Inject] private Character _character;
+
+        private bool _hidden;
+
+        private void Awake()
+        {
+            animation.enabled = false;
+            if (_character)
+                _character.grappled.AddListener(HidePlatform);
+        }
+
+        private void HidePlatform()
+        {
+            if (_hidden) return;
+
+            animation.enabled = true;
+            collider.enabled = false;
+            _hidden = true;
+        }
     }
 }

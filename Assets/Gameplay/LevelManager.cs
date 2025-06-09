@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using Events.FlagReached;
 using Events.PlayerDeath;
 using Gameplay.Misc;
@@ -13,22 +14,9 @@ namespace Gameplay
 {
     public class LevelManager : MonoBehaviour
     {
-        public enum FinishAction
-        {
-            ShowVictory,
-            LoadCutscene,
-            RestartLevel
-        }
-
-        public enum MultiplayerMode
-        {
-            SinglePlayer,
-            MultiplayerCooperative,
-            MultiplayerCompetitive
-        }
-
         [SerializeField] private string levelId;
-        [SerializeField] [CanBeNull] private string nextLevelId;
+
+        [SerializeField] [CanBeNull] private string nextSceneName;
 
         [SerializeField] private FinishAction finishAction;
         [SerializeField] private MultiplayerMode multiplayerMode;
@@ -67,18 +55,24 @@ namespace Gameplay
             _soundManager.Play("win");
 
             var milliseconds = (int)((Time.time - _startTime) * 1000f);
-            LoadSaveSystem.SetLevelAsCompleted(levelId, nextLevelId, milliseconds, out var isNewRecord);
+            LoadSaveSystem.SetLevelAsCompleted(levelId, nextSceneName, milliseconds, out var isNewRecord);
+            var formattedTime = (Time.time - _startTime).ToString("0.00", CultureInfo.InvariantCulture);
+
+            var username = PlayerPrefs.GetString("username", "Jantar");
 
             switch (finishAction)
             {
-                case FinishAction.ShowVictory:
-                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextLevelId), isNewRecord);
+                case FinishAction.ShowVictoryLevelNext:
+                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadLevel(nextSceneName), isNewRecord, formattedTime,
+                        username, milliseconds);
+                    break;
+                case FinishAction.ShowVictoryCutsceneNext:
+                    uiManager.EnableVictoryMenu(() => SceneLoader.LoadCutscene(nextSceneName), isNewRecord,
+                        formattedTime, username, milliseconds);
                     break;
                 case FinishAction.RestartLevel:
                     SceneLoader.ReloadScene();
                     break;
-                case FinishAction.LoadCutscene:
-                    throw new NotImplementedException();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -89,7 +83,7 @@ namespace Gameplay
             StartCoroutine(HandlePlayerDeathDelayed(deathData));
         }
 
-        private IEnumerator HandlePlayerDeathDelayed(DeathData deathData)
+        private IEnumerator HandlePlayerDeathDelayed(DeathData _)
         {
             _soundManager.Play("hit");
             yield return new WaitForSeconds(0.5f);
@@ -111,6 +105,20 @@ namespace Gameplay
         public void HandleFlagReached(FlagReachedData flagReachedData)
         {
             LevelFinished();
+        }
+
+        private enum MultiplayerMode
+        {
+            SinglePlayer,
+            MultiplayerCooperative,
+            MultiplayerCompetitive
+        }
+
+        private enum FinishAction
+        {
+            ShowVictoryLevelNext,
+            ShowVictoryCutsceneNext,
+            RestartLevel
         }
     }
 }

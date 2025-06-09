@@ -113,20 +113,24 @@ namespace Gameplay.Grappables.JumpPad
         {
             float t = 0;
             var rb = swingBody.GetComponent<Rigidbody2D>();
-            var initial = rb.linearVelocity;
             var savedVelocity = Vector2.zero;
             _current = swingBody;
+
+            var velocityAtGrab = rb.linearVelocity;
+
+            rb.linearVelocity = Vector2.zero;
 
             while (t < 1 && !IsTargetReached(rb.position))
             {
                 var dir = (TargetPosition - swingBody.Position2D).normalized;
-                var vel = Vector2.Lerp(initial, dir * maxApproachSpeed, jumpPadSpeedChange.Evaluate(t));
+
+                var vel = Vector2.Lerp(Vector2.zero, dir * maxApproachSpeed, jumpPadSpeedChange.Evaluate(t));
 
                 if (Vector2.Distance(TargetPosition, swingBody.Position2D) < velocitySaveDist &&
                     savedVelocity == Vector2.zero)
                 {
                     var perp = Vector2.Perpendicular(JumpDirection).normalized;
-                    savedVelocity = Vector2.Dot(perp, vel) * perp;
+                    savedVelocity = Vector2.Dot(perp, velocityAtGrab) * perp;
                 }
 
                 rb.linearVelocity = vel;

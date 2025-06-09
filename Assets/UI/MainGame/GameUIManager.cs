@@ -1,8 +1,10 @@
 using System;
 using System.Globalization;
+using EasyHighScore.Dino;
 using Gameplay.Misc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.MainGame
 {
@@ -14,6 +16,12 @@ namespace UI.MainGame
         [SerializeField] private GameObject victoryMenu;
         [SerializeField] private TextMeshProUGUI victoryText;
         [SerializeField] private GameObject newRecord;
+        [SerializeField] private GameObject globalScores;
+        [SerializeField] private ScoreDisplay scoreDisplay;
+        [SerializeField] private Button uploadScoreButton;
+        [SerializeField] private bool showGlobalScores = true;
+
+        [SerializeField] private DinoLeaderboardAdapter leaderboardProvider;
 
         private float _lastDisplayedTime = -1f;
         private Action _onNextLevelClicked;
@@ -63,19 +71,49 @@ namespace UI.MainGame
             pauseMenu.SetActive(false);
         }
 
-        public void EnableVictoryMenu(Action onNextLevelClicked, bool showNewRecord)
+        public void EnableVictoryMenu(Action onNextLevelClicked, bool showNewRecord, string formattedTime,
+            string username, int milliseconds)
         {
             DisableGameUI();
             Time.timeScale = 0f;
             victoryMenu.SetActive(true);
 
-            var currentTime = Time.time - _startTime;
-
             newRecord.SetActive(showNewRecord);
 
-            victoryText.SetText(victoryText.text.Replace("{time}",
-                currentTime.ToString("0.00", CultureInfo.InvariantCulture)));
+            victoryText.SetText(victoryText.text.Replace("{time}", formattedTime));
             _onNextLevelClicked = onNextLevelClicked;
+
+            globalScores.SetActive(false);
+
+            if (!showGlobalScores) return;
+
+            leaderboardProvider.DownloadHighScores(
+                scores =>
+                {
+                    globalScores.SetActive(true);
+                    scoreDisplay.DisplayHighScores(scores);
+                },
+                errorMsg => { Debug.LogError($"Failed to download high scores: {errorMsg}"); }
+            );
+            uploadScoreButton.onClick.AddListener(() =>
+            {
+                UploadNewHighScore(username, milliseconds);
+                uploadScoreButton.interactable = false;
+            });
+        }
+
+        private void RefreshGlobalScores()
+        {
+            leaderboardProvider.DownloadHighScores(
+                scores => { scoreDisplay.DisplayHighScores(scores); },
+                errorMsg => { Debug.LogError($"Failed to download high scores: {errorMsg}"); }
+            );
+        }
+
+        private void UploadNewHighScore(string username, int milliseconds)
+        {
+            leaderboardProvider.UploadNewHighScore(username, milliseconds, RefreshGlobalScores,
+                _ => { });
         }
 
         public void NextLevelClicked()

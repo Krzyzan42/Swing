@@ -32,7 +32,7 @@ namespace PathCreator.Core.Editor
 
         // Display
         private const int inspectorSectionSpacing = 10;
-        private const float constantHandleScale = .01f;
+        private const float constantHandleScale = .05f;
         private const float normalsSpacing = .2f;
         private GUIStyle boldFoldoutStyle;
 
