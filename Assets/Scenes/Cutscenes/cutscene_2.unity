@@ -27709,7 +27709,6 @@ GameObject:
   - component: {fileID: 2076742761}
   - component: {fileID: 2076742760}
   - component: {fileID: 2076742762}
-  - component: {fileID: 2076742763}
   - component: {fileID: 2076742765}
   m_Layer: 0
   m_Name: CutsceneManager
@@ -27786,18 +27785,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationTime: 14.4
   nextScene: Scenes/Levels/7
---- !u!114 &2076742763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076742759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5446cc11c9ad094387f8938725cfad1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &2076742765
 AudioSource:
   m_ObjectHideFlags: 0
@@ -27808,8 +27795,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7005ad6f7d0f9a74dbe1bd013aa68d4a, type: 3}
-  m_Resource: {fileID: 8300000, guid: 7005ad6f7d0f9a74dbe1bd013aa68d4a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 33398b4d1131f3145aa89ac62c378276, type: 3}
+  m_Resource: {fileID: 8300000, guid: 33398b4d1131f3145aa89ac62c378276, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
