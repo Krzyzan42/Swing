@@ -1,5 +1,7 @@
 using Gameplay.Misc;
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL)
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace UI.MainMenu
@@ -27,8 +29,7 @@ namespace UI.MainMenu
         public void ExitGame()
         {
             Application.Quit();
-#if UNITY_ANDROID || UNITY_IOS
-#else
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL)
             EditorApplication.ExitPlaymode();
 #endif
         }

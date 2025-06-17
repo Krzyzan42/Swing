@@ -16,6 +16,11 @@ namespace Gameplay
             AnimateCutscene().Forget();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space)) SceneLoader.Load(nextScene);
+        }
+
         private async UniTaskVoid AnimateCutscene()
         {
             var token = this.GetCancellationTokenOnDestroy();
